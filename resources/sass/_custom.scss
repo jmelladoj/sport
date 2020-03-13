@@ -1,0 +1,43 @@
+.top-bar .dropdown-toggle::after {
+    right: 0px !important;
+}
+
+.table-sm th, .table-sm td {
+    padding: 0.3rem !important;
+}
+
+.btn {
+    min-width: 35px;
+}
+
+fieldset {
+    border-bottom: none;
+}
+
+.alert-warning {
+    color: #000 !important;
+    background-color: #f8c200 !important;
+    border-color: #f8c200 !important;
+}
+
+.alert-success {
+    color: #000 !important;
+    background-color: #7bcb4d !important;
+    border-color: #7bcb4d !important;
+}
+
+.alert-danger {
+    color: #000 !important;
+    background-color: #f4516c !important;
+    border-color: #f4516c !important;
+}
+
+.alert-info {
+    color: #000 !important;
+    background-color: #56afd7 !important;
+    border-color: #56afd7 !important;
+}
+
+.alert {
+    padding: 0.25rem !important;
+}
