@@ -491,7 +491,7 @@
             listar_reservas(){
                let me = this
 
-                axios.get('/reservas/' + this.fecha_inicio + '/' + this.fecha_termino).then(function (response) {
+                axios.get('/api/reservas/' + this.fecha_inicio + '/' + this.fecha_termino).then(function (response) {
                     me.reservas = response.data.reservas
                     me.horas_semana = response.data.horas
                 })

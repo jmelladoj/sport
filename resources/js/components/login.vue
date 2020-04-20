@@ -4,8 +4,8 @@
             <b-row class="justify-content-center pb-5">
                 <b-col xs="10" md="4">
                     <div class="misc-header text-center">
-                        <img alt="" src="assets/img/icon.png" class="logo-icon margin-r-10">
-                        <img alt="" src="assets/img/logo-dark.png" class="toggle-none hidden-xs">
+                        <img alt="" src="/assets/img/src.png" class="logo-icon margin-r-10" width="200">
+
                     </div>
                     <div class="misc-box">
                         <form role="form">
@@ -19,12 +19,11 @@
                                         placeholder="Ingresa tu usuario"
                                         v-model="$v.login.usuario.$model"
                                         :state="$v.login.usuario.$dirty ? !$v.login.usuario.$error : null"
-                                        aria-describedby="usuario-input"
                                     ></b-form-input>
                                 </b-input-group>
 
-                                <b-form-invalid-feedback id="usuario-input">
-                                    Ingresa tu usuario, mínimo de 4 caracteres.
+                                <b-form-invalid-feedback :state="$v.login.usuario.$dirty ? !$v.login.usuario.$error : null">
+                                    <errores :errores="errores_login_usuario"></errores>
                                 </b-form-invalid-feedback>
                             </b-form-group>
 
@@ -39,14 +38,14 @@
                                         placeholder="Ingresa tu contraseña"
                                         v-model="$v.login.password.$model"
                                         :state="$v.login.password.$dirty ? !$v.login.password.$error : null"
-                                        aria-describedby="password-input"
                                     ></b-form-input>
                                 </b-input-group>
 
-                                <b-form-invalid-feedback id="password-input">
-                                    Ingresa tu contraseña y un mínimo de 4 caracteres.
+                                <b-form-invalid-feedback :state="$v.login.password.$dirty ? !$v.login.password.$error : null">
+                                    <errores :errores="errores_login_password"></errores>
                                 </b-form-invalid-feedback>
                             </b-form-group>
+
 
                             <hr>
                             <button type="button" :disabled="$v.login.$invalid" @click="ingresar" class="btn btn-block btn-success btn-rounded box-shadow">Ingresar</button>
@@ -70,6 +69,23 @@
                     password: ''
                 }
             }
+        },
+        computed: {
+            errores_login_usuario () {
+                const errores = []
+                if (!this.$v.login.usuario.$dirty) return errores
+                !this.$v.login.usuario.required && errores.push('Ingresa tu usuario.')
+                !this.$v.login.usuario.email && errores.push('Ingresa un usuario válido.')
+                !this.$v.login.usuario.minLength && errores.push('Ingresa al menos 3 caracteres.')
+                return errores
+            },
+            errores_login_password () {
+                const errores = []
+                if (!this.$v.login.password.$dirty) return errores
+                !this.$v.login.password.required && errores.push('Ingresa tu password.')
+                !this.$v.login.password.minLength && errores.push('Ingresa al menos 3 caracteres.')
+                return errores
+            },
         },
         validations:{
             login: {

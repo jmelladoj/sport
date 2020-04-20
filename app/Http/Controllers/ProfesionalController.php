@@ -8,46 +8,58 @@ use Illuminate\Http\Request;
 class ProfesionalController extends Controller
 {
     //
-    public function index($consulta){
-        switch ($consulta) {
-            case 1:
-                return ['profesionales' => Profesional::orderBy('nombre')->get()];
-                break;
-            case 2:
-                return ['profesionales' => Profesional::onlyTrashed()->orderBy('nombre')->get()];
-                break;
-        }
+    public function index()
+    {
+        //
+        return response()->json(Profesional::withTrashed()->orderBy('nombre')->get());
     }
 
-    public function validar_unico($texto){
-        return json_encode(Profesional::where('run', $texto)->get()->count() > 0 ? false : true);
-    }
-
-    public function crear_actualizar(Request $request){
+    public function store(Request $request)
+    {
+        //
         try {
-            if($request->id == 0){
-                return Profesional::create($request->all());
-            } else {
-                return Profesional::where('id', $request->id)->update($request->all());
-            }
-        } catch (Exception $e) {
+            return Profesional::create($request->all());
+        } catch (\Exception $e) {
             if($e->getCode() == 23000){
-                $profesional = Profesional::onlyTrashed()->where('correo', $request->correo)->first();
-                $profesional->restore();
+                $profesional =  Profesional::onlyTrashed()->where('run', $request->run)->first();
 
-                $request['id'] = $profesional->id;
+                if($profesional){
+                    $profesional->restore();
 
-                return Profesional::where('id', $profesional->id)->update($request->all());
+                    $profesional->fill($request->all());
+                    $profesional->save();
+                }
             }
         }
-
     }
 
-    public function borrar(Request $request){
-        if($request->accion == 1){
-            Profesional::find($request->id)->delete();
+    public function show($id)
+    {
+        //
+        return Profesional::withTrashed()->find($id);
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+        $profesional = Profesional::find($id);
+        $profesional->fill($request->all());
+        $profesional->save();
+    }
+
+    public function destroy($id)
+    {
+        //
+        $profesional = Profesional::withTrashed()->whereId($id)->first();
+
+        if($profesional->deleted_at){
+            $profesional->restore();
         } else {
-            Profesional::onlyTrashed()->where('id', $request->id)->restore();
+            $profesional->delete();
         }
+    }
+
+    public function unico($texto){
+        return response()->json(Profesional::where('run', $texto)->get()->count() > 0 ? false : true);
     }
 }

@@ -6,10 +6,6 @@
     padding: 0.3rem !important;
 }
 
-.btn {
-    min-width: 35px;
-}
-
 fieldset {
     border-bottom: none;
 }
@@ -40,4 +36,8 @@ fieldset {
 
 .alert {
     padding: 0.25rem !important;
+}
+
+.custom-select {
+    height: 39px !important;
 }

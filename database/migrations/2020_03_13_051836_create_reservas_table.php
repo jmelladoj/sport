@@ -19,21 +19,22 @@ class CreateReservasTable extends Migration
             $table->string('nombre_cliente');
             $table->string('nombre_servicio');
             $table->string('nombre_profesional');
-            $table->String('fecha_servicio');
+            $table->String('fecha_servicio')->nullable();
+            $table->smallInteger('estado')->default(1);
 
-            $table->unsignedBigInteger('cliente_id')->nullable()->default(null);
+            $table->unsignedBigInteger('cliente_id')->nullable();
             $table->foreign('cliente_id')->references('id')->on('clientes');
 
-            $table->unsignedBigInteger('servicio_id')->nullable()->default(null);
+            $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
 
-            $table->unsignedBigInteger('profesional_id')->nullable()->default(null);
+            $table->unsignedBigInteger('profesional_id')->nullable();
             $table->foreign('profesional_id')->references('id')->on('profesionales');
 
-            $table->unsignedBigInteger('hora_clinicas_id')->nullable()->default(null);
+            $table->unsignedBigInteger('hora_clinicas_id')->nullable();
             $table->foreign('hora_clinicas_id')->references('id')->on('hora_clinicas');
 
-            $table->text('observacion')->nullable()->default(null);
+            $table->text('observacion')->nullable();
             $table->softDeletes();
             $table->timestamps();
         });

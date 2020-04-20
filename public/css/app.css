@@ -13571,7 +13571,7 @@ input[type=color].form-control:disabled {
 @font-face {
   font-family: "FontAwesome";
   src: url(/fonts/fontawesome-webfont.eot?674f50d287a8c48dc19ba404d20fe713);
-  src: url(/fonts/fontawesome-webfont.eot?674f50d287a8c48dc19ba404d20fe713) format("embedded-opentype"), url(/fonts/fontawesome-webfont.woff2?af7ae505a9eed503f8b8e6982036873e) format("woff2"), url(/fonts/fontawesome-webfont.woff?fee66e712a8a08eef5805a46892932ad) format("woff"), url(/fonts/fontawesome-webfont.ttf?b06871f281fee6b241d60582ae9369b9) format("truetype"), url(/fonts/fontawesome-webfont.svg?912ec66d7572ff821749319396470bde) format("svg");
+  src: url(/fonts/fontawesome-webfont.eot?674f50d287a8c48dc19ba404d20fe713) format("embedded-opentype"), url(/fonts/fontawesome-webfont.woff2?af7ae505a9eed503f8b8e6982036873e) format("woff2"), url(/fonts/fontawesome-webfont.woff?fee66e712a8a08eef5805a46892932ad) format("woff"), url(/fonts/fontawesome-webfont.ttf?b06871f281fee6b241d60582ae9369b9) format("truetype"), url(/fonts/fontawesome-webfont.svg?acf3dcb7ff752b5296ca23ba2c7c2606) format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -16607,7 +16607,7 @@ input[type=color].form-control:disabled {
 @font-face {
   font-family: "simple-line-icons";
   src: url(/fonts/Simple-Line-Icons.eot?dacd16c9a3d2cb61b472a35979015bf3);
-  src: url(/fonts/Simple-Line-Icons.eot?dacd16c9a3d2cb61b472a35979015bf3) format("embedded-opentype"), url(/fonts/Simple-Line-Icons.ttf?b2892aa62b0fb2c21c8d7700e2ef6e56) format("truetype"), url(/fonts/Simple-Line-Icons.woff2?6ac7320f709ffd2784b4a861e5b60395) format("woff2"), url(/fonts/Simple-Line-Icons.woff?0bbfc705e37a927ce2ae72b749b3154d) format("woff"), url(/fonts/Simple-Line-Icons.svg?00ce23caac2c875bcc6db8e4afe5c532) format("svg");
+  src: url(/fonts/Simple-Line-Icons.eot?dacd16c9a3d2cb61b472a35979015bf3) format("embedded-opentype"), url(/fonts/Simple-Line-Icons.ttf?b2892aa62b0fb2c21c8d7700e2ef6e56) format("truetype"), url(/fonts/Simple-Line-Icons.woff2?6ac7320f709ffd2784b4a861e5b60395) format("woff2"), url(/fonts/Simple-Line-Icons.woff?0bbfc705e37a927ce2ae72b749b3154d) format("woff"), url(/fonts/Simple-Line-Icons.svg?de8ad55bfeaebbe67c5b9a362749de1a) format("svg");
   font-weight: normal;
   font-style: normal;
 }
@@ -26476,10 +26476,6 @@ ul.wysihtml5-toolbar a.btn.wysihtml5-command-active {
   padding: 0.3rem !important;
 }
 
-.btn {
-  min-width: 35px;
-}
-
 fieldset {
   border-bottom: none;
 }
@@ -26510,5 +26506,9 @@ fieldset {
 
 .alert {
   padding: 0.25rem !important;
+}
+
+.custom-select {
+  height: 39px !important;
 }
 

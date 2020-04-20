@@ -18,6 +18,10 @@ class CreateServiciosTable extends Migration
             $table->string('nombre');
             $table->integer('valor');
             $table->integer('cantidad_sesiones')->default(1);
+
+            $table->unsignedBigInteger('especialidad_id')->nullable()->default(null);
+            $table->foreign('especialidad_id')->references('id')->on('especialidades');
+
             $table->softDeletes();
             $table->timestamps();
         });

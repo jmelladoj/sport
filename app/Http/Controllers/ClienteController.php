@@ -9,46 +9,58 @@ use Illuminate\Http\Request;
 class ClienteController extends Controller
 {
     //
-    public function index($consulta){
-        switch ($consulta) {
-            case 1:
-                return ['clientes' => Cliente::orderBy('nombre')->get()];
-                break;
-            case 2:
-                return ['clientes' => Cliente::onlyTrashed()->orderBy('nombre')->get()];
-                break;
-        }
+    public function index()
+    {
+        //
+        return response()->json(Cliente::withTrashed()->orderBy('nombre')->get());
     }
 
-    public function validar_unico($texto){
-        return json_encode(Cliente::where('run', $texto)->get()->count() > 0 ? false : true);
-    }
-
-    public function crear_actualizar(Request $request){
+    public function store(Request $request)
+    {
+        //
         try {
-            if($request->id == 0){
-                return Cliente::create($request->all());
-            } else {
-                return Cliente::where('id', $request->id)->update($request->all());
-            }
-        } catch (Exception $e) {
+            return Cliente::create($request->all());
+        } catch (\Exception $e) {
             if($e->getCode() == 23000){
-                $cliente = Cliente::onlyTrashed()->where('correo', $request->correo)->first();
-                $cliente->restore();
+                $cliente =  Cliente::onlyTrashed()->where('run', $request->run)->first();
 
-                $request['id'] = $cliente->id;
+                if($cliente){
+                    $cliente->restore();
 
-                return Cliente::where('id', $cliente->id)->update($request->all());
+                    $cliente->fill($request->all());
+                    $cliente->save();
+                }
             }
         }
-
     }
 
-    public function borrar(Request $request){
-        if($request->accion == 1){
-            Cliente::find($request->id)->delete();
+    public function show($id)
+    {
+        //
+        return Cliente::withTrashed()->find($id);
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+        $cliente = Cliente::find($id);
+        $cliente->fill($request->all());
+        $cliente->save();
+    }
+
+    public function destroy($id)
+    {
+        //
+        $cliente = Cliente::withTrashed()->whereId($id)->first();
+
+        if($cliente->deleted_at){
+            $cliente->restore();
         } else {
-            Cliente::onlyTrashed()->where('id', $request->id)->restore();
+            $cliente->delete();
         }
+    }
+
+    public function unico($texto){
+        return response()->json(Cliente::where('run', $texto)->get()->count() > 0 ? false : true);
     }
 }

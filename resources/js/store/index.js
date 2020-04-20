@@ -24,8 +24,19 @@ export default new Vuex.Store({
 
             state.notificacion.mensaje = ''
         },
-        msg_success(state, mensaje){
+        msg_success(state, accion, mensaje = ""){
             state.notificacion.mensaje = mensaje
+            
+            if(accion){
+                switch (accion) {
+                    case 1:
+                        mensaje = "Registro agregado existosamente."
+                        break;
+                    case 2:
+                        mensaje = "Registro actualizado existosamente."
+                        break;
+                }
+            }
 
             Vue.$toast.open({
                 message: mensaje,
@@ -46,7 +57,7 @@ export default new Vuex.Store({
 
             state.notificacion.mensaje = ''
         },
-        msg_error(state, mensaje){
+        msg_error(state, mensaje = "Ha ocurrido un error al ingresar el registro."){
             state.notificacion.mensaje = mensaje
 
             Vue.$toast.open({

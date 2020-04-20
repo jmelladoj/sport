@@ -15,7 +15,7 @@ class Profesional extends Model
     protected $appends = ['nombre_especialidad'];
 
     public function especialidad(){
-        return $this->belongsTo(Especialidad::class, 'especialidad_id');
+        return $this->belongsTo(Especialidad::class, 'especialidad_id')->withTrashed();
     }
 
     public function getNombreEspecialidadAttribute(){

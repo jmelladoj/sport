@@ -23,6 +23,28 @@ class ReservaController extends Controller
             ];
     }
 
+    public function store(Request $request)
+    {
+        $cliente = Cliente::withTrashed()->find($request->cliente['id']);
+        
+        if($cliente){
+            $cliente->restore();
+            $cliente->update($request->cliente);
+        } else {
+            $cliente = Cliente::create($request->cliente);
+        }
+
+        $reservas = $request->reservas;
+
+        foreach ($reservas as $key => $item) {
+            $item['cliente_id'] = $cliente->id;
+            $item['nombre_cliente'] = $cliente->nombre;
+            Reserva::create($item);
+        }        
+        //
+
+    }
+
     public function index_horas_profesional($id, $fecha) {
         $horas_ocupadas = Reserva::where('profesional_id', $id)->where('fecha_servicio', $fecha)->get()->pluck('hora_clinicas_id');
 

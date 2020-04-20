@@ -9,15 +9,8 @@ use Illuminate\Http\Request;
 class HoraClinicaController extends Controller
 {
     //
-    public function index($consulta){
-        switch ($consulta) {
-            case 1:
-                return ['horas' => HoraClinica::orderBy('hora')->get()];
-                break;
-            case 2:
-                return ['horas' => HoraClinica::onlyTrashed()->orderBy('hora')->get()];
-                break;
-        }
+    public function index(){
+        return response()->json(HoraClinica::orderBy('hora')->get());
     }
 
     public function validar_unico($texto){

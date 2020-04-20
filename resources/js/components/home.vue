@@ -101,7 +101,7 @@
 
 					<div class="card-body border-bottom text-center nav-profile">
 						<div class="notify setpos"> <span class="heartbit"></span> <span class="point hidden"></span> </div>
-                        <img alt="profile" class="margin-b-10  " src="assets/img/avtar-2.png" width="80">
+                        <img alt="profile" class="margin-b-10  " src="assets/img/avtar-1.png" width="80">
                         <p class="lead margin-b-0 toggle-none text-capitalize" v-if="usuario" v-text="usuario.nombre"></p>
                         <p class="text-muted mv-0 toggle-none">Bienvenido</p>
                     </div>
@@ -112,11 +112,11 @@
                         <li class="nav-item"><router-link class="nav-link" to="/clientes"><i class="fa fa-users"></i><span class="toggle-none">Clientes</span></router-link></li>
 
                         <li class="nav-heading"><span>Clínica</span></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
+                        
                         <li class="nav-item"><router-link class="nav-link" to="/profesionales"><i class="fa fa-user-md"></i><span class="toggle-none">Profesionales</span></router-link></li>
 
                         <li class="nav-heading"><span>Configuración</span></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/servicios"><i class="fa fa-list-ol"></i><span class="toggle-none">Servicios</span></router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/bloques"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
                     </ul>
                 </div>

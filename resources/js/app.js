@@ -39,17 +39,33 @@ import store from './store/index.js'
 
 //Componentes vue router
 import Home from './components/home.vue'
-import Escritorio from './components/intranet/escritorio.vue'
-import Clientes from './components/intranet/clientes.vue'
-import Especialidades from './components/intranet/especialidades.vue'
+
+//Rutas de reservas
+import Escritorio from './components/intranet/escritorio/index.vue'
+import Reservas_agregar_modificar from './components/intranet/escritorio/agregar_modificar.vue'
+
+//Rutas de especialidades
+import Especialidades from './components/intranet/especialidades/index.vue'
+import Especialidades_agregar_modificar from './components/intranet/especialidades/agregar_modificar.vue'
+
+//Rutas de servicios
+import Servicios from './components/intranet/servicios/index.vue'
+import Servicios_agregar_modificar from './components/intranet/servicios/agregar_modificar.vue'
+
 import HorariosClinica from './components/intranet/horarios_clinica.vue'
-import Profesionales from './components/intranet/profesionales.vue'
-import Servicios from './components/intranet/servicios.vue'
+
+//Rutas de profesionales
+import Profesionales from './components/intranet/profesionales/index.vue' 
+import Profesionales_agregar_modificar from './components/intranet/profesionales/agregar_modificar.vue' 
+
+//Rutas de profesionales
+import Clientes from './components/intranet/clientes/index.vue' 
+import Clientes_agregar_modificar from './components/intranet/clientes/agregar_modificar.vue' 
 
 //Estilos
-import 'vue-toast-notification/dist/index.css';
+import 'vue-toast-notification/dist/theme-default.css';
 
-const router = new VueRouter({
+const router = new VueRouter({ 
     mode: 'history',
     routes: [
         {
@@ -58,9 +74,9 @@ const router = new VueRouter({
             component: Escritorio
         },
         {
-            path: '/clientes',
-            name: 'clientes',
-            component: Clientes
+            path: '/reserva/:id?',
+            name: 'administrar_reservas',
+            component: Reservas_agregar_modificar
         },
         {
             path: '/especialidades',
@@ -68,7 +84,20 @@ const router = new VueRouter({
             component: Especialidades
         },
         {
-            path: '/bloques',
+            path: '/especialidades/administrar/:id?',
+            name: 'administrar_especialidades',
+            component: Especialidades_agregar_modificar
+        },{
+            path: '/especialidades/administrar/servicios/:id',
+            name: 'servicios',
+            component: Servicios
+        },{
+            path: '/servicios/administrar/:id_especialidad?/:id?',
+            name: 'administrar_servicios',
+            component: Servicios_agregar_modificar
+        },
+        {
+            path: '/bloques', 
             name: 'bloques',
             component: HorariosClinica
         },
@@ -78,10 +107,20 @@ const router = new VueRouter({
             component: Profesionales
         },
         {
-            path: '/servicios',
-            name: 'servicios',
-            component: Servicios
-        }
+            path: '/profesionales/administrar/:id?',
+            name: 'administrar_profesionales',
+            component: Profesionales_agregar_modificar
+        },
+        {
+            path: '/clientes',
+            name: 'clientes',
+            component: Clientes
+        },
+        {
+            path: '/clientes/administrar/:id?',
+            name: 'administrar_clientes',
+            component: Clientes_agregar_modificar
+        },
     ],
 });
 
@@ -99,6 +138,7 @@ const router = new VueRouter({
 
 //Componentes generales
 Vue.component('titulo-pagina', require('./components/general/titulo.vue').default);
+Vue.component('errores', require('./components/general/errores.vue').default);
 
 Vue.component('iniciar-sesion', require('./components/login.vue').default);
 

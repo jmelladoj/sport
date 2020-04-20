@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>FixedPlus - Bootstrap Admin Dashboard Template</title>
+    <title>SRCENTER - Sistema</title>
 	<link rel="icon" type="image/png" sizes="16x16" href="{{ asset('assets/img/icon.png') }} ">
 
     <!-- Scripts -->
