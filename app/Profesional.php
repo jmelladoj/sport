@@ -21,4 +21,8 @@ class Profesional extends Model
     public function getNombreEspecialidadAttribute(){
         return $this->especialidad ? $this->especialidad->nombre : 'Sin especialidad';
     }
+
+    public function horarios(){
+        return $this->hasMany(HorarioProfesional::class, 'profesional_id')->withTrashed();
+    }
 }

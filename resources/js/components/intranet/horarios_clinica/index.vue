@@ -1,8 +1,8 @@
 <template>
     <div>
-        <titulo-pagina titulo="Especialidades" :accion="false"> 
+        <titulo-pagina titulo="Horarios clínica" :accion="false"> 
             <template slot="btn_accion">
-                <router-link class="btn btn-success box-shadow btn-icon btn-rounded" to="/especialidades/administrar/"><i class="fa fa-plus"></i> Agregar registro</router-link>
+                <router-link class="btn btn-success box-shadow btn-icon btn-rounded" to="/horarios/clinica/administrar/"><i class="fa fa-plus"></i> Agregar registro</router-link>
             </template>
         </titulo-pagina>
 
@@ -56,22 +56,22 @@
                         {{ data.index + 1 }}
                     </template>
 
-                    <template v-slot:cell(valor)="data">
-                        {{ data.item.valor | currency }}
-                    </template>
-
                     <template v-slot:cell(estado)="data">
                         <b-badge v-if="!data.item.deleted_at" variant="success" class="text-white">Activo</b-badge>
                         <b-badge v-else variant="danger" class="text-white">Inactivo</b-badge>
                     </template>
 
                     <template v-slot:cell(acciones)="row">
-                        <router-link class="btn btn-success btn-rounded btn-xs" :to="{ name: 'servicios', params: {id: row.item.id}}"  v-b-tooltip.hover title="Agregar servicios al registro"><i class="fa fa-plus"></i></router-link>
-                        <router-link class="btn btn-warning btn-rounded btn-xs" :to="{ name: 'administrar_especialidades', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar información del registro"><i class="fa fa-pencil"></i></router-link>
+                        <router-link v-if="!row.item.deleted_at" class="btn btn-warning btn-rounded btn-xs" :to="{ name: 'administrar_horarios_clinica', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar información del registro"><i class="fa fa-pencil"></i></router-link>
 
-                        <b-button size="xs" variant="danger" class="btn-rounded" v-b-tooltip.hover title="Eliminar registro" @click="borrar(row.item.id, 1)">
+                        <b-button v-if="row.item.deleted_at" variant="warning" class="btn-rounded"  size="xs" v-b-tooltip.hover title="Restaurar registro" @click="borrar(row.item.id, 2)">
+                            <i class="fa fa fa-undo"></i>
+                        </b-button>
+
+                        <b-button v-else size="xs" variant="danger" class="btn-rounded" v-b-tooltip.hover title="Eliminar registro" @click="borrar(row.item.id, 1)">
                             <i class="fa fa-trash"></i>
                         </b-button>
+
                     </template>
                 </b-table>
             </b-card>
@@ -86,7 +86,9 @@
                 items: [],
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
-                    { key: 'nombre', label: 'Nombre', sortable: true, class: 'text-left' },
+                    { key: 'hora', label: 'Hora', sortable: true, class: 'text-left' },
+                    { key: 'nombre_tipo_hora', label: 'Tipo de horario', sortable: true, class: 'text-left' },
+                    { key: 'estado', label: 'Estado', sortable: true, class: 'text-center' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 totalRows: 1,
@@ -110,16 +112,18 @@
                 this.totalRows = filteredItems.length
                 this.currentPage = 1
             },
-            listar_especialidades(){
+            listar_horarios(){
                 let me = this
 
-                axios.get('/api/especialidades').then(function (response) {
+                axios.get('/api/horarios/clinica').then(function (response) {
                     me.items = response.data
                 }).catch(function (error) {
                     me.$store.commit('msg_error')
                 })
             },
             borrar(id, accion) {
+                let me = this
+
                 swal.fire({
                     title: accion == 1 ? '¿Deseas borrar el registro?' : '¿Deseas resturar el registro?',
                     icon: 'warning',
@@ -130,9 +134,8 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        let me = this
-                        axios.delete('/api/especialidades/' + id).then(function (response) {
-                            me.listar_especialidades();
+                        axios.delete('/api/horarios/clinica/' + id).then(function (response) {
+                            me.listar_horarios()
                             me.$store.commit('msg_success', accion == 1 ? 3 : 4)
                         }).catch(function (error) {
                             me.$store.commit('msg_error')
@@ -142,7 +145,7 @@
             }
         },
         mounted() {
-            this.listar_especialidades()
+            this.listar_horarios()
         }
     }
 </script>

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\HoraClinica;
+use App\HorarioProfesional;
 use App\Profesional;
 use Illuminate\Http\Request;
 
@@ -18,7 +20,7 @@ class ProfesionalController extends Controller
     {
         //
         try {
-            return Profesional::create($request->all());
+            $profesional =  Profesional::create($request->all());
         } catch (\Exception $e) {
             if($e->getCode() == 23000){
                 $profesional =  Profesional::onlyTrashed()->where('run', $request->run)->first();
@@ -31,6 +33,24 @@ class ProfesionalController extends Controller
                 }
             }
         }
+
+        $horarios = HoraClinica::withTrashed()->get();
+
+        foreach($horarios AS $h){
+            for($i = 1; $i <= 6; $i++){
+                HorarioProfesional::create(
+                    [
+                        'dia' => $i,
+                        'hora' => $h->hora,
+                        'profesional_id' => $profesional->id,
+                        'hora_clinicas_id' => $h->id
+                    ]
+                );
+            }
+
+        }
+
+        return $profesional;
     }
 
     public function show($id)

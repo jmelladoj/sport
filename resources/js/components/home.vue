@@ -4,10 +4,9 @@
             <div class="container-fluid">
                 <div class="row">
                     <div class="col">
-                        <a class="admin-logo" href="index.html">
+                        <a class="admin-logo" href="javascript::void(0)">
                             <h1>
-                                <img alt="" src="assets/img/icon.png" class="logo-icon margin-r-10">
-                                <img alt="" src="assets/img/logo-dark.png" class="toggle-none hidden-xs">
+                                <img alt="" src="/assets/img/src.png" class="logo-icon margin-r-10 img-fluid" width="120">
                             </h1>
                         </a>
                         <div class="left-nav-toggle" >
@@ -17,8 +16,8 @@
                             <a  href="#" class="nav-collapsed"><i class="fa fa-bars"></i></a>
                         </div>
                         <ul class="list-inline top-right-nav">
-                            <li class="dropdown icons-dropdown d-none-m">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-bell"></i> <div class="notify setpos"> <span class="heartbit"></span> <span class="point"></span> </div></a>
+                            <!--<li class="dropdown icons-dropdown d-none-m">
+                                <a class="dropdown-toggle" data-toggle="dropdown" href="#"><i class="fa fa-bell"></i><div class="notify setpos"> <span class="heartbit"></span> <span class="point"></span> </div></a>
                                 <ul class="dropdown-menu top-dropdown lg-dropdown notification-dropdown">
                                     <li>
                                         <div class="dropdown-header">
@@ -67,10 +66,10 @@
                                         </div>
                                     </li>
                                 </ul>
-                            </li>
+                            </li>-->
                             <li class="dropdown avtar-dropdown">
-                                <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                                    <img alt="" class="rounded-circle" src="assets/img/avtar-2.png" width="30">
+                                <a href="#">
+                                    <img alt="" class="rounded-circle" src="assets/img/avtar-1.png" width="30">
                                     <span v-if="usuario" v-text="usuario.nombre" class="text-capitalize"></span>
                                 </a>
                                 <ul class="dropdown-menu top-dropdown">
@@ -117,10 +116,10 @@
 
                         <li class="nav-heading"><span>Configuración</span></li>
                         <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/bloques"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
+                        <li class="nav-item"><router-link class="nav-link" to="/horarios/clinica"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
                     </ul>
                 </div>
-            </div>
+            </div> 
         </div>
 
         <router-view></router-view>

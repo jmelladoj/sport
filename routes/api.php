@@ -21,9 +21,17 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
 //Rutas de usuarios
 Route::apiResource('especialidades', 'EspecialidadController');
 
+//Rutas de horarios
+Route::apiResource('horarios/clinica', 'HoraClinicaController');
+Route::get('/horarios/clinica/unico/{texto}', 'HoraClinicaController@unico')->name('horario_clinica.unico');
+
+//Rutas de horarios de profesional
+Route::apiResource('horarios/profesional', 'HorarioProfesionalController');
+Route::post('/disponibilidad/profesional/', 'HorarioProfesionalController@index_disponibilidad')->name('horarios_profesional.index.disponibildiad');
 //Rutas de servicios
 Route::apiResource('servicios', 'ServicioController')->except(['index']);
 Route::get('/servicio/{id}', 'ServicioController@index')->name('servicios.index');
+Route::get('/servicios', 'ServicioController@index_servicios')->name('servicios.index.servicios');
 
 //Rutas de profesionales
 Route::apiResource('profesionales', 'ProfesionalController');

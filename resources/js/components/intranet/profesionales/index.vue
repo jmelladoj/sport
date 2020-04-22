@@ -56,17 +56,14 @@
                         {{ data.index + 1 }}
                     </template>
 
-                    <template v-slot:cell(valor)="data">
-                        {{ data.item.valor | currency }}
-                    </template>
-
                     <template v-slot:cell(estado)="data">
                         <b-badge v-if="!data.item.deleted_at" variant="success" class="text-white">Activo</b-badge>
                         <b-badge v-else variant="danger" class="text-white">Inactivo</b-badge>
                     </template>
 
                     <template v-slot:cell(acciones)="row">
-                        <router-link class="btn btn-warning btn-rounded btn-xs" :to="{ name: 'administrar_profesionales', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar información del registro"><i class="fa fa-pencil"></i></router-link>
+                        <router-link v-if="!row.item.deleted_at" class="btn btn-success btn-rounded btn-xs" :to="{ name: 'administrar_horarios_profesional', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar horarios del registro"><i class="fa fa-calendar"></i></router-link>
+                        <router-link v-if="!row.item.deleted_at" class="btn btn-warning btn-rounded btn-xs" :to="{ name: 'administrar_profesionales', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar información del registro"><i class="fa fa-pencil"></i></router-link>
 
                         <b-button v-if="row.item.deleted_at" variant="warning" class="btn-rounded"  size="xs" v-b-tooltip.hover title="Restaurar registro" @click="borrar(row.item.id, 2)">
                             <i class="fa fa fa-undo"></i>
@@ -95,6 +92,7 @@
                     { key: 'correo', label: 'Correo', sortable: true, class: 'text-left' },
                     { key: 'telefono', label: 'Teléfono', sortable: true, class: 'text-left' },
                     { key: 'observacion', label: 'Observación', sortable: true, class: 'text-left' },
+                    { key: 'estado', label: 'Estado', sortable: true, class: 'text-center' },
                     { key: 'acciones', label: 'Acciones', class: 'text-center'}
                 ],
                 totalRows: 1,
@@ -124,7 +122,7 @@
                 axios.get('/api/profesionales').then(function (response) {
                     me.items = response.data
                 }).catch(function (error) {
-                    me.$store.commit('msg_error', 'Ha ocurrido un problema al cargar la información.')
+                    me.$store.commit('msg_error')
                 })
             },
             borrar(id, accion) {
@@ -139,12 +137,9 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.delete('/api/profesionales/' + id,{
-                            'id': id,
-                            'accion': accion
-                        }).then(function (response) {
+                        axios.delete('/api/profesionales/' + id).then(function (response) {
                             me.listar_profesionales();
-                            me.$store.commit('msg_success', accion == 1 ? 'Registro eliminado exitosamente.' : 'Registro restaurado exitosamente.')
+                            me.$store.commit('msg_success', accion == 1 ? 3 : 4)
                         }).catch(function (error) {
                             me.$store.commit('msg_error')
                         })

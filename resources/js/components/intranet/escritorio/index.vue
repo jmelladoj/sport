@@ -36,108 +36,120 @@
                         <b-tr class="text-center" v-for="h in horas_semana" :key="h.id">
                             <b-td class="font-weight-bold" v-text="h.hora"></b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.lunes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.lunes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.lunes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.lunes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.lunes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.martes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.martes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.martes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.martes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.martes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.miercoles).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.miercoles)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.miercoles).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.miercoles)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.miercoles).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.jueves).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.jueves)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.jueves).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.jueves)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.jueves).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.viernes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.viernes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.viernes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.viernes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.viernes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.sabado).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.sabado)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.sabado).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.sabado)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button v-if="r.estado != 3" size="xs" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                    <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
                                         <i class="fa fa-check"></i>
                                     </b-button>
 
-                                    <b-button v-if="r.estado != 3" size="xs" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                    <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
                                         <i class="fa fa fa-remove"></i>
                                     </b-button>
+
+                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
                                 </b-alert>
                                 <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.sabado).length == 0" variant="info" show>
                                     Sin reservas
@@ -242,6 +254,30 @@
                     console.log(error);
                 });
             },
+            estado_reserva(id, accion = 2){
+                let me = this
+
+                swal.fire({
+                    title: accion == 2 ? '¿Deseas confirmar la reserva?' : '¿Deseas anular la reserva?',
+                    icon: accion == 2 ? 'success' : 'error',
+                    showCancelButton: true,
+                    confirmButtonColor: '#3085d6',
+                    cancelButtonColor: '#d33',
+                    confirmButtonText: accion == 2 ? 'Sí, ¡confirmar!' : 'Sí, anular',
+                    cancelButtonText: 'Cancelar'
+                }).then((result) => {
+                    if (result.value) {
+                        axios.put('/api/reservas/' + id,{
+                            'estado': accion
+                        }).then(function (response) {
+                            me.listar_reservas()
+                            me.$store.commit('msg_success', 1)
+                        }).catch(function (error) {
+                            me.$store.commit('msg_error')
+                        })
+                    }
+                })
+            }
         },
         mounted(){
             this.listar_dias()

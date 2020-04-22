@@ -146,12 +146,9 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.delete('/api/servicios/' + id,{
-                            'id': id,
-                            'accion': accion
-                        }).then(function (response) {
+                        axios.delete('/api/servicios/' + id).then(function (response) {
                             me.listar_servicios();
-                            me.$store.commit('msg_success', accion == 1 ? 'Registro eliminado exitosamente.' : 'Registro restaurado exitosamente.')
+                            me.$store.commit('msg_success', accion == 1 ? 3 : 4)
                         }).catch(function (error) {
                             me.$store.commit('msg_error', 'Ha ocurrido un error, por favor intentalo nuevamente.')
                         })

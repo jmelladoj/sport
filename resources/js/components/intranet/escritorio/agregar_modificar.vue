@@ -7,6 +7,94 @@
         </titulo-pagina>
 
         <section class="main-content">
+            <b-card header-text-variant="white" header="Detalles de la reserva" header-bg-variant="primary">
+                <b-form>
+                    <b-row>
+                        <b-col md="6">                    
+                            <b-form-group label="Servicio">
+                                <b-input-group prepend="123">
+                                    <b-form-select
+                                        v-model="$v.formulario.reserva.servicio_id.$model"
+                                        :state="$v.formulario.reserva.servicio_id.$dirty ? !$v.formulario.reserva.servicio_id.$error : null"
+                                        :options="opciones_servicios"
+                                        @change="cargar_profesionales">
+                                    </b-form-select>
+
+                                    <template v-slot:append>
+                                        <router-link class="btn btn-success" to="/servicios/administrar/"  v-b-tooltip.hover title="Agregar servicios"><i class="fa fa-plus"></i></router-link>
+                                    </template>
+                                </b-input-group>
+                            </b-form-group>
+                            
+
+                            <b-form-invalid-feedback :state="$v.formulario.reserva.servicio_id.$dirty ? !$v.formulario.reserva.servicio_id.$error : null">
+                                <errores :errores="errores_reserva_servicio_id"></errores>
+                            </b-form-invalid-feedback>
+                        </b-col>
+
+                        <b-col md="6">                    
+                            <b-form-group label="Profesional">
+                                <b-input-group prepend="123">
+                                    <b-form-select
+                                        v-model="$v.formulario.reserva.profesional_id.$model"
+                                        :state="$v.formulario.reserva.profesional_id.$dirty ? !$v.formulario.reserva.profesional_id.$error : null"
+                                        :options="opciones_profesionales"
+                                        :disabled="opciones_profesionales.length ? false : true"
+                                        @change="cargar_sesiones_servicio">
+                                    </b-form-select>
+                                </b-input-group>
+                            </b-form-group>
+                            
+
+                            <b-form-invalid-feedback :state="$v.formulario.reserva.profesional_id.$dirty ? !$v.formulario.reserva.profesional_id.$error : null">
+                                <errores :errores="errores_reserva_profesional_id"></errores>
+                            </b-form-invalid-feedback>
+                        </b-col>
+
+                       <b-col lg="12" v-show="formulario.reserva.reservas.length">
+                            <b-table-simple class="my-3" show-empty small striped outlined stacked="sm">
+                                <b-thead>
+                                    <b-tr class="text-center">
+                                        <b-th>#</b-th>
+                                        <b-th>Nombre servicio</b-th>
+                                        <b-th>Fecha a agendar</b-th>
+                                        <b-th>Hora a agendar</b-th>
+                                    </b-tr>
+                                </b-thead>
+                                <b-tbody>
+                                    <b-tr v-for="(r, index) in formulario.reserva.reservas" :key="index">
+                                        <b-td>{{ index + 1 }}</b-td>
+                                        <b-td>{{ r.nombre_servicio }}</b-td>
+                                        <b-td>
+                                            <b-input-group prepend="Abc" class="mt-0 mb-0">
+                                                <b-form-input
+                                                    type="date"
+                                                    v-model="$v.formulario.reserva.reservas.$each[index].fecha_servicio.$model" 
+                                                    :state="$v.formulario.reserva.reservas.$each[index].fecha_servicio.$dirty ? !$v.formulario.reserva.reservas.$each[index].fecha_servicio.$error : null"
+                                                    @change="obtener_horarios(index)">
+                                                    
+                                                </b-form-input>
+                                            </b-input-group>
+                                        </b-td>
+                                        <b-td>
+                                            <b-input-group prepend="123" class="mt-0 mb-0">
+                                                <b-form-select
+                                                    :id="'servicio_' + index"
+                                                    v-model="$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$model"
+                                                    :state="$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$dirty ? !$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$error : null"
+                                                    disabled
+                                                    class="mt-0 mb-0">
+                                                </b-form-select>
+                                            </b-input-group>                                     
+                                        </b-td>
+                                    </b-tr>
+                                </b-tbody>
+                            </b-table-simple>
+                        </b-col>
+                    </b-row>
+                </b-form>
+            </b-card>
+
             <b-card header-text-variant="white" header="Información sobre el cliente" header-bg-variant="primary">
                 <b-form>
                     <b-row>
@@ -134,113 +222,6 @@
                 </b-form>
             </b-card>
 
-            <b-card header-text-variant="white" header="Detalles de la reserva" header-bg-variant="primary">
-                <b-form>
-                    <b-row>
-                        <b-col xs="12" sm="12" md="4">                    
-                            <b-form-group label="Especialidad">
-                                <b-input-group prepend="123">
-                                    <b-form-select
-                                        v-model="$v.formulario.reserva.especialidad_id.$model"
-                                        :state="$v.formulario.reserva.especialidad_id.$dirty ? !$v.formulario.reserva.especialidad_id.$error : null"
-                                        :options="opciones_especialidad"
-                                        @change="listar_servicios">
-                                    </b-form-select>
-                                </b-input-group>
-                            </b-form-group>
-                            
-
-                            <b-form-invalid-feedback :state="$v.formulario.reserva.especialidad_id.$dirty ? !$v.formulario.reserva.especialidad_id.$error : null">
-                                <errores :errores="errores_reserva_especialidad_id"></errores>
-                            </b-form-invalid-feedback>
-                        </b-col>
-
-                        <b-col xs="12" sm="12" md="4">                    
-                            <b-form-group label="Profesional">
-                                <b-input-group prepend="123">
-                                    <b-form-select
-                                        v-model="$v.formulario.reserva.profesional_id.$model"
-                                        :state="$v.formulario.reserva.profesional_id.$dirty ? !$v.formulario.reserva.profesional_id.$error : null"
-                                        :options="opciones_profesionales"
-                                        @change="listar_servicios">
-                                    </b-form-select>
-                                </b-input-group>
-                            </b-form-group>
-                            
-
-                            <b-form-invalid-feedback :state="$v.formulario.reserva.profesional_id.$dirty ? !$v.formulario.reserva.profesional_id.$error : null">
-                                <errores :errores="errores_reserva_profesional_id"></errores>
-                            </b-form-invalid-feedback>
-                        </b-col>
-
-                        <b-col xs="12" sm="12" md="4">                    
-                            <b-form-group label="Servicio">
-                                <b-input-group prepend="123">
-                                    <b-form-select
-                                        v-model="$v.formulario.reserva.servicio_id.$model"
-                                        :state="$v.formulario.reserva.servicio_id.$dirty ? !$v.formulario.reserva.servicio_id.$error : null"
-                                        :options="opciones_servicios"
-                                        :disabled="opciones_servicios.length > 0 ? false : true"
-                                        @change="servicio_seleccionado">
-                                    </b-form-select>
-
-                                    <template v-slot:append>
-                                        <router-link class="btn btn-success" to="/servicios/administrar/"  v-b-tooltip.hover title="Agregar servicios"><i class="fa fa-plus"></i></router-link>
-                                    </template>
-                                </b-input-group>
-                            </b-form-group>
-                            
-
-                            <b-form-invalid-feedback :state="$v.formulario.reserva.servicio_id.$dirty ? !$v.formulario.reserva.servicio_id.$error : null">
-                                <errores :errores="errores_reserva_servicio_id"></errores>
-                            </b-form-invalid-feedback>
-                        </b-col>
-
-                       <b-col lg="12" v-show="formulario.reserva.reservas.length">
-                            <b-table-simple class="my-3" show-empty small striped outlined stacked="sm">
-                                <b-thead>
-                                    <b-tr class="text-center">
-                                        <b-th>#</b-th>
-                                        <b-th>Nombre servicio</b-th>
-                                        <b-th>Fecha a agendar</b-th>
-                                        <b-th>Hora a agendar</b-th>
-                                    </b-tr>
-                                </b-thead>
-                                <b-tbody>
-                                    <b-tr v-for="(r, index) in formulario.reserva.reservas" :key="index">
-                                        <b-td>{{ index + 1 }}</b-td>
-                                        <b-td>{{ r.nombre_servicio }}</b-td>
-                                        <b-td>
-                                            <b-form-group>
-                                                <b-input-group prepend="Abc">
-                                                    <b-form-input
-                                                        type="date"
-                                                        v-model="$v.formulario.reserva.reservas.$each[index].fecha_servicio.$model" 
-                                                        :state="$v.formulario.reserva.reservas.$each[index].fecha_servicio.$dirty ? !$v.formulario.reserva.reservas.$each[index].fecha_servicio.$error : null">
-                                                    </b-form-input>
-                                                </b-input-group>
-                                            </b-form-group>         
-                                        </b-td>
-                                        <b-td>
-                                            <b-form-group class="mt-0 mb-0">
-                                                <b-input-group prepend="123" class="mt-0 mb-0">
-                                                    <b-form-select
-                                                        v-model="$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$model"
-                                                        :state="$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$dirty ? !$v.formulario.reserva.reservas.$each[index].hora_clinicas_id.$error : null"
-                                                        :options="opciones_horarios"
-                                                        class="mt-0 mb-0">
-                                                    </b-form-select>
-                                                </b-input-group>
-                                            </b-form-group>                                          
-                                        </b-td>
-                                    </b-tr>
-                                </b-tbody>
-                            </b-table-simple>
-                        </b-col>
-                    </b-row>
-                </b-form>
-            </b-card>
-
             <b-row class="mb-5">
                 <b-col lg="12" class="text-right">
                     <b-button variant="success" class="box-shadow btn-icon btn-rounded" @click="agregar_modificar_reserva"><i :class="modifica ? 'fa fa-pencil' : 'fa fa-plus'"></i>{{ modifica ? 'Actualizar' : 'Agregar' }} registro</b-button>
@@ -260,16 +241,13 @@
             return {
                 modifica: false,
                 clientes: [],
-                opciones_horarios: [],
+                profesionales: [],
                 opciones_profesionales: [],
-                especialidades: [],
-                opciones_especialidad: [],
                 servicios: [],
                 opciones_servicios: [],
                 formulario: {
                     reserva: {
                         id: null,
-                        especialidad_id: null,
                         servicio_id: null,
                         profesional_id: null,
                         reservas: []
@@ -290,20 +268,11 @@
         validations:{
             formulario: {
                 reserva: {
-                    especialidad_id: {
-                        required,
-                        numeric,
-                        minValue: minValue(1)
-                    },
                     servicio_id: {
                         required,
-                        numeric,
-                        minValue: minValue(1)
                     },
                     profesional_id: {
                         required,
-                        numeric,
-                        minValue: minValue(1)
                     },
                     reservas:{
                         $each: {
@@ -405,14 +374,6 @@
                 !this.$v.formulario.cliente.observacion.minLength && errores.push('Ingresa al menos 3 caracteres.')
                 return errores
             },
-            errores_reserva_especialidad_id () {
-                const errores = []
-                if (!this.$v.formulario.reserva.especialidad_id.$dirty) return errores
-                !this.$v.formulario.reserva.especialidad_id.required && errores.push('El campo es requerido.')
-                !this.$v.formulario.reserva.especialidad_id.numeric && errores.push('Solo se aceptan números.')
-                !this.$v.formulario.reserva.especialidad_id.minValue && errores.push('El valor mínimo aceptado es 0.')
-                return errores
-            },
             errores_reserva_servicio_id () {
                 const errores = []
                 if (!this.$v.formulario.reserva.servicio_id.$dirty) return errores
@@ -425,114 +386,10 @@
                 const errores = []
                 if (!this.$v.formulario.reserva.profesional_id.$dirty) return errores
                 !this.$v.formulario.reserva.profesional_id.required && errores.push('El campo es requerido.')
-                !this.$v.formulario.reserva.profesional_id.numeric && errores.push('Solo se aceptan números.')
-                !this.$v.formulario.reserva.profesional_id.minValue && errores.push('El valor mínimo aceptado es 0.')
                 return errores
             }
         },
         methods: {
-            listar_horarios(){
-                let me = this
-
-                axios.get('/api/horarios').then(function (response) {
-
-                    var item = {
-                        value: null,
-                        text: 'Por definir hora'
-                    }
-
-                    me.opciones_horarios.push(item)
-
-                    response.data.forEach(function(h) {
-                        var horario = {
-                            value: h.id,
-                            text: h.hora
-                        }
-
-                        me.opciones_horarios.push(horario)
-                    })
-
-                }).catch(function (error) {
-                    me.$store.commit('msg_error')
-                })
-            },
-            listar_especialidades(){
-                let me = this
-
-                axios.get('/api/especialidades').then(function (response) {
-                    me.especialidades = response.data
-
-                    var item = {
-                        value: null,
-                        text: 'Selecciona una opción ...'
-                    }
-
-                    me.opciones_especialidad.push(item)
-
-                    response.data.forEach(function(e) {
-                        var especialidad = {
-                            value: e.id,
-                            text: e.nombre
-                        }
-
-                        me.opciones_especialidad.push(especialidad)
-                    })
-
-                }).catch(function (error) {
-                    me.$store.commit('msg_error')
-                })
-            },
-            listar_profesionales(){
-                let me = this
-
-                axios.get('/api/profesionales').then(function (response) {
-                    var item = {
-                        value: null,
-                        text: 'Selecciona una opción ...'
-                    }
-
-                    me.opciones_profesionales.push(item)
-
-                    response.data.forEach(function(p) {
-                        if(!p.deleted_at){
-                            var profesional = {
-                                value: p.id,
-                                text: p.nombre
-                            }
-
-                            me.opciones_profesionales.push(profesional)
-                        }
-                    })
-
-                }).catch(function (error) {
-                    me.$store.commit('msg_error')
-                })
-            },
-            listar_servicios(){
-                let me = this
-
-                me.opciones_servicios = []
-                me.servicios = []
-                
-                let especialidad = this.especialidades.find(e => e.id == this.formulario.reserva.especialidad_id)
-                me.servicios = especialidad.servicios
-
-                var item = {
-                    value: null,
-                    text: 'Selecciona una opción ...'
-                }
-
-                me.opciones_servicios.push(item)
-
-                me.servicios.forEach(function(s) {
-                    var servicio = {
-                        value: s.id,
-                        text: s.nombre
-                    }
-
-                    me.opciones_servicios.push(servicio)
-                })
-            },
             listar_clientes(run){
                 let me = this
 
@@ -560,20 +417,69 @@
                     me.formulario.cliente.observacion = cliente.observacion
                 }
             },
-            servicio_seleccionado(){
+            listar_servicios(){
+                let me = this
+
+                axios.get('/api/servicios').then(function (response) {
+                    me.servicios = response.data
+
+                    var item = { value: null, text: 'Selecciona una opción ...'}
+
+                    me.opciones_servicios.push(item)
+    
+                    me.servicios.forEach(function(s) {
+                        var servicio = { value: s.id, text: s.nombre }
+                        me.opciones_servicios.push(servicio)
+                    })
+
+                }).catch(function (error) {
+                    me.$store.commit('msg_error')
+                })
+            },
+            listar_profesionales(){
+                let me = this
+
+                axios.get('/api/profesionales').then(function (response) {
+                    me.profesionales = response.data
+                }).catch(function (error) {
+                    me.$store.commit('msg_error')
+                })
+            },
+            cargar_profesionales(){
+                let me = this
+
+                let servicio = this.servicios.find(s => this.formulario.reserva.servicio_id == s.id)
+
+                if(servicio){
+                   var profesionales = this.profesionales.filter(p => p.especialidad_id == servicio.especialidad_id)
+                
+                    var item = { value: null, text: 'Selecciona una opción ...'}
+
+                    me.opciones_profesionales.push(item)
+    
+                    me.profesionales.forEach(function(p) {
+                        var profesional = { value: p.id, text: p.nombre }
+                        me.opciones_profesionales.push(profesional)
+                    })
+                }
+                
+            },
+            cargar_sesiones_servicio(){
                 let me = this
 
                 me.formulario.reserva.reservas = []
 
                 let servicio = this.servicios.find(s => s.id == this.formulario.reserva.servicio_id)
-                let profesional = this.opciones_profesionales.find(p => p.value == this.formulario.reserva.profesional_id)
+                let profesional = this.profesionales.find(p => p.id == this.formulario.reserva.profesional_id)
+
 
                 if(servicio && profesional){
                     for (let index = 0; index < servicio.cantidad_sesiones; index++) {
+                        var horarios = []
                         var reserva = {
                             'nombre_cliente': me.formulario.cliente.nombre,
                             'nombre_servicio': servicio.nombre,
-                            'nombre_profesional': profesional.text,
+                            'nombre_profesional': profesional.nombre,
                             'fecha_servicio': null,
                             'estado': 1,
                             'cliente_id': null,
@@ -585,6 +491,33 @@
                         me.formulario.reserva.reservas.push(reserva)
                     }
                 }
+            },
+            obtener_horarios(index){
+                let me = this
+
+                $("#servicio_" + index).children().remove().end()
+                $("#servicio_" + index).prop('disabled', true)
+
+                axios.post('/api/disponibilidad/profesional',{
+                    'fecha': me.formulario.reserva.reservas[index].fecha_servicio,
+                    'profesional_id': me.formulario.reserva.profesional_id
+                }).then(function (response) {
+                    $("#servicio_" + index).append(new Option("Selecciona una opción ...", null))
+
+                    response.data.forEach(function(h) {
+                        $("#servicio_" + index).append(new Option(h.hora, h.hora_clinicas_id))
+                    })
+
+                    if(response.data.length > 0){
+                        $("#servicio_" + index).prop('disabled', false)
+                    } else {
+                        $("#servicio_" + index).children().remove().end()
+                        $("#servicio_" + index).append(new Option("Sin horarios de atención", null))
+                    }
+                }).catch(function (error) {
+                    me.$store.commit('msg_error')
+                })
+
             },
             agregar_modificar_reserva(){
                 if(this.$v.formulario.$invalid){
@@ -606,6 +539,7 @@
                         'reservas': me.formulario.reserva.reservas
                     }
                 }).then(function (response) {
+                    me.listar_clientes()
                     me.limpiar_datos()
                     me.$store.commit('msg_success', me.modifica ? 2 : 1)
                 }).catch(function (error) {
@@ -614,30 +548,27 @@
             },
             limpiar_datos(){
                 if(!this.modifica){
-                    //this.formulario.id = null
-                    //this.formulario.run = ''
-                    //this.formulario.nombre = ''
-                    //this.formulario.direccion = ''
-                    //this.formulario.correo = ''
-                    //this.formulario.telefono = null
-                    //this.formulario.fecha_nacimiento = null
-                    //this.formulario.observacion = ''
+                    this.formulario.id = null
+                    this.formulario.run = ''
+                    this.formulario.nombre = ''
+                    this.formulario.direccion = ''
+                    this.formulario.correo = ''
+                    this.formulario.telefono = null
+                    this.formulario.fecha_nacimiento = null
+                    this.formulario.observacion = ''
 
-                    //this.formulario.reserva.id = null
-                    //this.formulario.reserva.especialidad_id = null
-                    //this.formulario.reserva.servicio_id = null
-                    //this.formulario.reserva.profesional_id = null
+                    this.formulario.reserva.id = null
+                    this.formulario.reserva.servicio_id = null
+                    this.formulario.reserva.profesional_id = null
                 } else {
                     this.$router.go(-1)
                 }
-
             }
         },
         mounted() {
-            this.listar_horarios()
-            this.listar_clientes()
+            this.listar_servicios()
             this.listar_profesionales()
-            this.listar_especialidades()
+            this.listar_clientes()
         }
     }
 </script>

@@ -260,8 +260,6 @@
                 const errores = []
                 if (!this.$v.formulario.profesional.especialidad_id.$dirty) return errores
                 !this.$v.formulario.profesional.especialidad_id.required && errores.push('El campo es requerido.')
-                !this.$v.formulario.profesional.especialidad_id.numeric && errores.push('Solo se aceptan números.')
-                !this.$v.formulario.profesional.especialidad_id.minValue && errores.push('El valor mínimo aceptado es 0.')
                 return errores
             },
             errores_profesional_observacion () {

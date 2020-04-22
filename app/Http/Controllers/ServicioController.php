@@ -12,6 +12,10 @@ class ServicioController extends Controller
         return response()->json(Especialidad::whereId($id)->with('servicios')->orderBy('nombre')->first());
     }
 
+    public function index_servicios(){
+        return response()->json(Servicio::orderBy('nombre')->get());
+    }
+
     public function store(Request $request)
     {
         //

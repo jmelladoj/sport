@@ -123,7 +123,7 @@
                 axios.get('/api/clientes').then(function (response) {
                     me.items = response.data
                 }).catch(function (error) {
-                    me.$store.commit('msg_error', 'Ha ocurrido un problema al cargar la información.')
+                    me.$store.commit('msg_error')
                 })
             },
             borrar(id, accion) {
@@ -138,12 +138,9 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.delete('/api/clientes/' + id,{
-                            'id': id,
-                            'accion': accion
-                        }).then(function (response) {
+                        axios.delete('/api/clientes/' + id).then(function (response) {
                             me.listar_clientes();
-                            me.$store.commit('msg_success', accion == 1 ? 'Registro eliminado exitosamente.' : 'Registro restaurado exitosamente.')
+                            me.$store.commit('msg_success', accion == 1 ? 3 : 4)
                         }).catch(function (error) {
                             me.$store.commit('msg_error')
                         })

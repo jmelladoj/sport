@@ -24,9 +24,9 @@ export default new Vuex.Store({
 
             state.notificacion.mensaje = ''
         },
-        msg_success(state, accion, mensaje = ""){
+        msg_success(state, accion = 0, mensaje = ""){
             state.notificacion.mensaje = mensaje
-            
+
             if(accion){
                 switch (accion) {
                     case 1:
@@ -35,6 +35,12 @@ export default new Vuex.Store({
                     case 2:
                         mensaje = "Registro actualizado existosamente."
                         break;
+                    case 3: 
+                        mensaje = "Registro eliminado existosamente."
+                            break;
+                    case 4: 
+                        mensaje = "Registro restaurado existosamente."
+                            break;
                 }
             }
 

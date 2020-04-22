@@ -261,12 +261,9 @@
                 }).then((result) => {
                     if (result.value) {
                         let me = this
-                        axios.post('/hora/borrar',{
-                            'id': id,
-                            'accion': accion
-                        }).then(function (response) {
+                        axios.post('/hora/borrar').then(function (response) {
                             me.listar_horas(me.consulta);
-                            me.$store.commit('msg_success', accion == 1 ? 'Registro eliminado exitosamente.' : 'Registro restaurado exitosamente.')
+                            me.$store.commit('msg_success', accion == 1 ? 3 : 4)
                         }).catch(function (error) {
                             me.$store.commit('msg_error', 'Ha ocurrido un error, por favor intentalo nuevamente.')
                             console.log(error);

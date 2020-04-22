@@ -43,7 +43,7 @@ import Home from './components/home.vue'
 //Rutas de reservas
 import Escritorio from './components/intranet/escritorio/index.vue'
 import Reservas_agregar_modificar from './components/intranet/escritorio/agregar_modificar.vue'
-
+import Reagendar from './components/intranet/escritorio/reagendar.vue'
 //Rutas de especialidades
 import Especialidades from './components/intranet/especialidades/index.vue'
 import Especialidades_agregar_modificar from './components/intranet/especialidades/agregar_modificar.vue'
@@ -52,12 +52,14 @@ import Especialidades_agregar_modificar from './components/intranet/especialidad
 import Servicios from './components/intranet/servicios/index.vue'
 import Servicios_agregar_modificar from './components/intranet/servicios/agregar_modificar.vue'
 
-import HorariosClinica from './components/intranet/horarios_clinica.vue'
+//Horarios clinica
+import HorariosClinica from './components/intranet/horarios_clinica/index.vue'
+import Horarios_clinica_agregar_modificar from './components/intranet/horarios_clinica/agregar_modificar.vue'
 
 //Rutas de profesionales
 import Profesionales from './components/intranet/profesionales/index.vue' 
 import Profesionales_agregar_modificar from './components/intranet/profesionales/agregar_modificar.vue' 
-
+import Profesionales_horarios_agregar_modificar from './components/intranet/profesionales/horarios.vue' 
 //Rutas de profesionales
 import Clientes from './components/intranet/clientes/index.vue' 
 import Clientes_agregar_modificar from './components/intranet/clientes/agregar_modificar.vue' 
@@ -79,13 +81,18 @@ const router = new VueRouter({
             component: Reservas_agregar_modificar
         },
         {
+            path: '/reserva/reagendar/:id?',
+            name: 'reagendar',
+            component: Reagendar
+        },
+        {
             path: '/especialidades',
             name: 'especialidades',
             component: Especialidades
         },
         {
             path: '/especialidades/administrar/:id?',
-            name: 'administrar_especialidades',
+            name: 'administrar_especialidades', 
             component: Especialidades_agregar_modificar
         },{
             path: '/especialidades/administrar/servicios/:id',
@@ -95,11 +102,14 @@ const router = new VueRouter({
             path: '/servicios/administrar/:id_especialidad?/:id?',
             name: 'administrar_servicios',
             component: Servicios_agregar_modificar
-        },
-        {
-            path: '/bloques', 
-            name: 'bloques',
+        },{
+            path: '/horarios/clinica',
+            name: 'horarios_clinica',
             component: HorariosClinica
+        },{
+            path: '/horarios/clinica/administrar/:id?',
+            name: 'administrar_horarios_clinica',
+            component: Horarios_clinica_agregar_modificar
         },
         {
             path: '/profesionales',
@@ -110,6 +120,11 @@ const router = new VueRouter({
             path: '/profesionales/administrar/:id?',
             name: 'administrar_profesionales',
             component: Profesionales_agregar_modificar
+        },
+        {
+            path: '/profesionales/horarios/administrar/:id?',
+            name: 'administrar_horarios_profesional',
+            component: Profesionales_horarios_agregar_modificar
         },
         {
             path: '/clientes',
