@@ -11,4 +11,8 @@ class Cliente extends Model
     use SoftDeletes;
 
     protected $guarded = ['id'];
+
+    public function reservas(){
+        return $this->hasMany(Reserva::class, 'cliente_id')->withTrashed();
+    }
 }

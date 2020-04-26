@@ -85,11 +85,19 @@
                     hora: {
                         required,
                         async isUnique (value) {
-                            if(this.modifica) return true
-                            if (value === '' || value.length < 3) return true
+                            if(this.modifica || value === '') return true
 
-                            const response = await fetch(`/api/horarios/clinica/unico/${value}`)
-                            return await response.json()
+                            return new Promise((resolve, reject) => {
+                                axios.get(`/api/horarios/clinica/unico/${value}`)
+                                .then((response) => {
+                                    this.isUnique = response.data
+                                    resolve(response.data)
+                                })
+                                .catch((error) => {
+                                    this.isUnique = false
+                                    reject(false)
+                                })
+                            })                      
                         }
                     },
                     tipo_hora: {
@@ -140,11 +148,9 @@
 
                 let me = this
 
-                var ruta = this.modifica ? '/api/horarios/clinica/' + this.formulario.horario_clinica.id : '/api/horarios/clinica/'
+                var ruta = this.modifica ? '/api/horarios/clinica/' + this.formulario.horario_clinica.id : '/api/horarios/clinica'
                 var method = this.modifica ? 'PUT' : 'POST'
 
-                console.log(ruta)
-                console.log(method)
                 axios({
                     method: method,
                     url: ruta,

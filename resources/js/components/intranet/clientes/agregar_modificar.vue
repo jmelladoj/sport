@@ -170,13 +170,21 @@
                 cliente: {
                     run: {
                         required,
-                        minLength: minLength(7),
+                        minLength: minLength(9),
                         async isUnique (value) {
-                            if(this.modifica) return true
-                            if (value === '' || value.length < 3) return true
+                            if(this.modifica || value === '' || value.length < 9) return true
 
-                            const response = await fetch(`/api/clientes/unico/${value}`)
-                            return await response.json()
+                            return new Promise((resolve, reject) => {
+                                axios.get(`/api/clientes/unico/${value}`)
+                                .then((response) => {
+                                    this.isUnique = response.data
+                                    resolve(response.data)
+                                })
+                                .catch((error) => {
+                                    this.isUnique = false
+                                    reject(false)
+                                })
+                            })                      
                         }
                     },
                     nombre: {
@@ -216,7 +224,7 @@
                 const errores = []
                 if (!this.$v.formulario.cliente.run.$dirty) return errores
                 !this.$v.formulario.cliente.run.required && errores.push('El campo es requerido.')
-                !this.$v.formulario.cliente.run.minLength && errores.push('Ingresa al menos 7 caracteres.')
+                !this.$v.formulario.cliente.run.minLength && errores.push('Ingresa al menos 9 caracteres.')
                 !this.$v.formulario.cliente.run.isUnique && errores.push('El cliente ya se encuentra ingresado en el sistema.')
                 return errores
             },

@@ -30,16 +30,19 @@ class HoraClinicaController extends Controller
         }
 
         $profesionales = Profesional::withTrashed()->get();
-        
-        foreach ($profesionales as $p) {
-            HorarioProfesional::create(
-                [
-                    'hora'             => $horario->hora,
-                    'profesional_id'   => $p->id,
-                    'hora_clinicas_id' => $horario->id,
-                    'deleted_at'       => $p->deleted_at ? Carbon::now() : null
-                ]
-            );
+
+        for($i = 1; $i <= 6; $i++){
+            foreach ($profesionales as $p) {
+                HorarioProfesional::create(
+                    [
+                        'hora'             => $horario->hora,
+                        'profesional_id'   => $p->id,
+                        'hora_clinicas_id' => $horario->id,
+                        'dia'              => $i,
+                        'deleted_at'       => $p->deleted_at ? Carbon::now() : null
+                    ]
+                );
+            }
         }
 
         return $horario;
@@ -70,6 +73,37 @@ class HoraClinicaController extends Controller
     }
 
     public function unico($texto){
-        return response()->json(HoraClinica::where('hora', $texto)->get()->count() > 0 ? false : true);
+        $hora = HoraClinica::where('hora', $texto)->first();
+        return response()->json($hora ? false : true);
+    }
+
+    public function dias($accion, $fecha){
+        if($fecha == 'sf'){
+            $fecha = Carbon::now()->startOfWeek();
+        }
+
+        if($accion != 0){
+            switch ($accion) {
+                case '1':
+                    $fecha = Carbon::parse($fecha)->addWeek('1')->startOfWeek();
+                    break;
+                case '2':
+                    $fecha = Carbon::parse($fecha)->subWeek('1')->startOfWeek();
+                    break;
+            }
+        }
+
+        return response()->json(
+            [ 
+                'fecha' => $fecha->format('Y-m-d'),
+                'lunes' => $fecha->format('Y-m-d'),
+                'martes' => $fecha->addDay('1')->format('Y-m-d'),
+                'miercoles' => $fecha->addDay('1')->format('Y-m-d'),
+                'jueves' => $fecha->addDay('1')->format('Y-m-d'),
+                'viernes' => $fecha->addDay('1')->format('Y-m-d'),
+                'sabado' => $fecha->addDay('1')->format('Y-m-d')
+            ]
+        );
+
     }
 }

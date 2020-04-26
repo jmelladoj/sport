@@ -13,19 +13,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::get('/', function () {
-    return view('welcome');
-});
+Route::get('/{vue_capture?}', function () {
+    return view('inicio');
+})->where('vue_capture', '[\/\w\.-]*');
 
 //Ruta de usuario
-Route::get('/usuario/logeado', 'UsuarioController@logeado')->name('Usuario logeado');
+//Route::get('/usuario/logeado', 'UsuarioController@logeado')->name('Usuario logeado');
 
 //Rutas de reservas
-Route::get('/horas/profesional/{id}/{fecha}', 'ReservaController@index_horas_profesional')->name('Listar horas por profesional');
-Route::post('/reserva/agendar', 'ReservaController@agendar')->name('Agendar reserva');
-Route::post('/reserva/actualizar/estado', 'ReservaController@actualizar_estado_reserva')->name('Agendar reserva');
+//Route::get('/horas/profesional/{id}/{fecha}', 'ReservaController@index_horas_profesional')->name('Listar horas por profesional');
+//Route::post('/reserva/agendar', 'ReservaController@agendar')->name('Agendar reserva');
+//Route::post('/reserva/actualizar/estado', 'ReservaController@actualizar_estado_reserva')->name('Agendar reserva');
 
-Route::get('/{any}', 'HomeController@index')->where('any', '.*')->name('home');
-
-Auth::routes();
+//Auth::routes();
  

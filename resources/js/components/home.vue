@@ -117,6 +117,7 @@
                         <li class="nav-heading"><span>Configuración</span></li>
                         <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/horarios/clinica"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
+                        <li class="nav-item"><b-button size="sm" variant="danger" class="btn-rounded mt-4" block @click="logout"><i class="fa fa-sign-out"></i><span class="toggle-none">Salir</span></b-button></li>
                     </ul>
                 </div>
             </div> 
@@ -125,13 +126,13 @@
         <router-view></router-view>
 
         <footer class="footer text-center ml-0">
-            <span>Copyright &copy; 2020 srcenter app</span>
+            <span>Copyright &copy; 2020 SRCenter APP</span>
         </footer>
     </div>
 </template>
 
 <script>
-    import { mapState, mapGetters, mapActions, mapMutations } from 'vuex'
+    import { mapState, mapActions, mapMutations } from 'vuex'
 
     export default {
         computed: {
@@ -139,21 +140,31 @@
         },
         methods: {
             ...mapActions('usuario', ['salir']),
-            ...mapMutations('usuario', ['actualizar']),
-            usuario_logeado(){
+            ...mapMutations(['msg_error', 'cambiar_token', 'eliminar_token']),
+            logout(){
                 let me = this
 
-                axios.get('/usuario/logeado').then(function (response) {
-                    if(response.data.usuario){
-                        me.actualizar(response.data.usuario)
-                    } else {
-                        me.$router.push('/')
-                    }
+                axios.get('/api/auth/logout').then(function (response) {
+                    me.eliminar_token()
+                    me.salir()
+                    window.location = '/'
                 })
-            }
+            }   
         },
-        beforeMount() {
-            this.usuario_logeado()
+        created() {
+            this.cambiar_token()
+
+            if(!this.$store.state.access_token){
+                window.location = '/'
+            }
         }
     }
 </script>
+
+<style>
+    @import '../../../public/css/app.css';
+
+    html,body{
+        height: 100%;
+    }
+</style>

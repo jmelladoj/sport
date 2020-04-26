@@ -24,5 +24,6 @@ mix.scripts([
    'public/assets/lib/slimscroll/jquery.slimscroll.min.js',
    'public/assets/lib/nano-scroll/jquery.nanoscroller.min.js',
    'public/assets/lib/metisMenu/metisMenu.min.js',
-   'public/assets/js/custom.js'
+   'public/assets/js/custom.js',
+   'public/assets/js/datajs.js'
    ], 'public/js/pagina.js');

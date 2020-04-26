@@ -36,7 +36,6 @@ class ClienteController extends Controller
 
     public function show($id)
     {
-        //
         return Cliente::withTrashed()->find($id);
     }
 
@@ -61,6 +60,13 @@ class ClienteController extends Controller
     }
 
     public function unico($texto){
-        return response()->json(Cliente::where('run', $texto)->get()->count() > 0 ? false : true);
+        $cliente = Cliente::where('run', $texto)->first();
+        return response()->json($cliente ? false : true);
+    }
+
+    public function reservas($id)
+    {   
+        $cliente = Cliente::find($id);
+        return $cliente->reservas;
     }
 }

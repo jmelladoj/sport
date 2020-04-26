@@ -156,7 +156,9 @@
                                 </b-alert>
                             </b-td>
                         </b-tr>
-
+                        <b-tr class="text-center">
+                            <b-td colspan="7"><h4 class="mb-3 mt-3"><b>Sin reservas en la semana.</b></h4></b-td>
+                        </b-tr>
                     </b-tbody>
                 </b-table-simple>
             </b-card>
@@ -200,21 +202,13 @@
                 let me = this
 
                 axios.get('/api/profesionales').then(function (response) {
-                    var item = {
-                        value: null,
-                        text: 'Todos'
-                    }
+                    me.opciones_profesionales.push({ value: null, text: 'Todos'})
 
-                    me.opciones_profesionales.push(item)
+                    if(response.data.length) return false
 
                     response.data.forEach(function(p) {
                         if(!p.deleted_at){
-                            var profesional = {
-                                value: p.id,
-                                text: p.nombre
-                            }
-
-                            me.opciones_profesionales.push(profesional)
+                            me.opciones_profesionales.push({ value: p.id, text: p.nombre })
                         }
 
                     })
@@ -225,7 +219,7 @@
             },
             listar_dias(accion = 0){
                 let me = this
-                axios.get('/api/horarios/dias/' + accion + '/' + this.fecha_inicio).then(function (response) {
+                axios.get('/api/horario/dias/' + accion + '/' + this.fecha_inicio).then(function (response) {
                     me.fecha_inicio = response.data.fecha
                     me.fecha_termino = response.data.sabado
 
@@ -279,7 +273,7 @@
                 })
             }
         },
-        mounted(){
+        mounted() {
             this.listar_dias()
             this.listar_profesionales()
         }

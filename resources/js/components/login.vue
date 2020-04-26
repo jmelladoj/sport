@@ -8,7 +8,7 @@
 
                     </div>
                     <div class="misc-box">
-                        <form role="form">
+                        <form role="form" @keyup.enter="ingresar">
                             <b-form-group label="Usuario">
                                 <b-input-group>
                                     <template v-slot:append>
@@ -48,7 +48,7 @@
 
 
                             <hr>
-                            <button type="button" :disabled="$v.login.$invalid" @click="ingresar" class="btn btn-block btn-success btn-rounded box-shadow">Ingresar</button>
+                            <button type="button" @click="ingresar" class="btn btn-block btn-success btn-rounded box-shadow">Ingresar</button>
                         </form>
                     </div>
                 </b-col>
@@ -58,7 +58,7 @@
 </template>
 
 <script>
-    import { required, minLength, between, email } from 'vuelidate/lib/validators'
+    import { required, minLength } from 'vuelidate/lib/validators'
     import { mapMutations } from 'vuex'
 
     export default {
@@ -100,27 +100,40 @@
             }
         },
         methods: {
-            ...mapMutations(['msg_success', 'msg_error']),
+            ...mapMutations(['msg_success', 'msg_error', 'obtener_token']),
+            ...mapMutations('usuario', ['actualizar']),
             ingresar(){
                 if(this.$v.login.$invalid){
                     this.$v.login.$touch()
+                    this.$store.commit('msg_error', 'Recuerda llenar correctamente el formulario.')
                     return
                 }
 
                 let me = this
 
-                axios.post('/login',{
+                axios.post('/api/auth/login',{
                     'usuario': me.login.usuario,
                     'password': me.login.password
                 }).then(function (response) {
-                    window.location.href = "/home"
+                    me.$store.commit('obtener_token', response.data.access_token)
+                    me.actualizar(response.data.usuario)
+                    me.$router.push('home')
                 }).catch(function (error) {
+                    console.error(error)
                     if (error.response.status == 422){
                         me.login.password = ''
-                        me.$store.commit('msg_error', 'Las credenciales introducidas son incorrectas.')
+                        me.$store.commit('msg_error')
                     }
                 })
             }
         }
     }
 </script>
+
+<style>
+    @import '../../../public/css/app.css';
+
+    html,body{
+        height: 100%;
+    }
+</style>

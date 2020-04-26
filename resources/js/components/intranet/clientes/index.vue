@@ -66,6 +66,7 @@
                     </template>
 
                     <template v-slot:cell(acciones)="row">
+                        <router-link class="btn btn-success btn-rounded btn-xs" :to="{ name: 'reservas_cliente', params: {id: row.item.id}}"  v-b-tooltip.hover title="Ver reservas del cliente"><i class="fa fa-list"></i></router-link>
                         <router-link class="btn btn-warning btn-rounded btn-xs" :to="{ name: 'administrar_clientes', params: {id: row.item.id}}"  v-b-tooltip.hover title="Actualizar información del registro"><i class="fa fa-pencil"></i></router-link>
 
                         <b-button v-if="row.item.deleted_at" variant="warning" class="btn-rounded"  size="xs" v-b-tooltip.hover title="Restaurar registro" @click="borrar(row.item.id, 2)">

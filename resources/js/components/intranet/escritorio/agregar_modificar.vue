@@ -222,6 +222,10 @@
                 </b-form>
             </b-card>
 
+            <b-card v-if="formulario.cliente.id" header-text-variant="white" header="Historial clínico del cliente" header-bg-variant="primary">
+                <reservas-cliente :id_cliente="formulario.cliente.id"></reservas-cliente>
+            </b-card>
+
             <b-row class="mb-5">
                 <b-col lg="12" class="text-right">
                     <b-button variant="success" class="box-shadow btn-icon btn-rounded" @click="agregar_modificar_reserva"><i :class="modifica ? 'fa fa-pencil' : 'fa fa-plus'"></i>{{ modifica ? 'Actualizar' : 'Agregar' }} registro</b-button>
@@ -288,7 +292,7 @@
                 cliente: {
                     run: {
                         required,
-                        minLength: minLength(7)
+                        minLength: minLength(9)
                     },
                     nombre: {
                         required,
@@ -547,22 +551,19 @@
                 })
             },
             limpiar_datos(){
-                if(!this.modifica){
-                    this.formulario.id = null
-                    this.formulario.run = ''
-                    this.formulario.nombre = ''
-                    this.formulario.direccion = ''
-                    this.formulario.correo = ''
-                    this.formulario.telefono = null
-                    this.formulario.fecha_nacimiento = null
-                    this.formulario.observacion = ''
+                this.formulario.cliente.id = null
+                this.formulario.cliente.run = ''
+                this.formulario.cliente.nombre = ''
+                this.formulario.cliente.direccion = ''
+                this.formulario.cliente.correo = ''
+                this.formulario.cliente.telefono = null
+                this.formulario.cliente.fecha_nacimiento = null
+                this.formulario.cliente.observacion = ''
 
-                    this.formulario.reserva.id = null
-                    this.formulario.reserva.servicio_id = null
-                    this.formulario.reserva.profesional_id = null
-                } else {
-                    this.$router.go(-1)
-                }
+                this.formulario.reserva.id = null
+                this.formulario.reserva.servicio_id = null
+                this.formulario.reserva.profesional_id = null
+                this.formulario.reserva.reservas = []
             }
         },
         mounted() {

@@ -1,6 +1,6 @@
 <template>
-    <ul class="ml-3" v-show="errores.length > 0">
-        <li v-for="(e, index) in errores" :key="index" v-text="e"></li>
+    <ul class="ml-3 mt-n4 mb-4" v-show="errores.length > 0">
+        <li class="h6" v-for="(e, index) in errores" :key="index"><b>{{ e }}</b></li>
     </ul>
 </template>
 

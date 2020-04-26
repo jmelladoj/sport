@@ -80,6 +80,7 @@ class ProfesionalController extends Controller
     }
 
     public function unico($texto){
-        return response()->json(Profesional::where('run', $texto)->get()->count() > 0 ? false : true);
+        $profesional = Profesional::where('run', $texto)->first();
+        return response()->json($profesional ? false : true);
     }
 }
