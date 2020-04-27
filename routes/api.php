@@ -50,6 +50,9 @@ Route::middleware(['auth:api'])->group(function () {
     Route::apiResource('reservas', 'ReservaController')->except(['index']);
     Route::get('/reservas/{fecha_inicio}/{fecha_termino}', 'ReservaController@index')->name('reservas.index');
 
+    //Rutas de reservas
+    Route::apiResource('ventas', 'VentaController');
+
     //Rutas de usuarios
     Route::apiResource('horarios', 'HoraClinicaController');
 });

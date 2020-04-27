@@ -66,6 +66,9 @@ import Clientes from './components/intranet/clientes/index.vue'
 import Clientes_agregar_modificar from './components/intranet/clientes/agregar_modificar.vue' 
 import Reservas_cliente from './components/intranet/clientes/reservas.vue' 
 
+//Rutas de profesionales
+import Ventas from './components/intranet/ventas/index.vue' 
+
 //Estilos
 import 'vue-toast-notification/dist/theme-default.css';
 
@@ -101,7 +104,10 @@ const router = new VueRouter({
                 //Rutas de clientes
                 { path: '/clientes', name: 'clientes', component: Clientes},
                 { path: '/clientes/administrar/:id?', name: 'administrar_clientes', component: Clientes_agregar_modificar},
-                { path: '/reservas/cliente/:id?', name: 'reservas_cliente', component: Reservas_cliente}
+                { path: '/reservas/cliente/:id?', name: 'reservas_cliente', component: Reservas_cliente},
+
+                //Rutas de ventas
+                { path: '/ventas', name: 'ventas', component: Ventas},
             ]
         },
     ],

@@ -110,9 +110,9 @@
                         <li class="nav-item"><router-link class="nav-link" to="/home"><i class="fa fa-home"></i><span class="toggle-none">Escritorio</span></router-link></li>
                         <li class="nav-item"><router-link class="nav-link" to="/clientes"><i class="fa fa-users"></i><span class="toggle-none">Clientes</span></router-link></li>
 
-                        <li class="nav-heading"><span>Clínica</span></li>
-                        
+                        <li class="nav-heading"><span>Clínica</span></li> 
                         <li class="nav-item"><router-link class="nav-link" to="/profesionales"><i class="fa fa-user-md"></i><span class="toggle-none">Profesionales</span></router-link></li>
+                         <li class="nav-item"><router-link class="nav-link" to="/ventas"><i class="fa fa-usd"></i><span class="toggle-none">Ventas</span></router-link></li>
 
                         <li class="nav-heading"><span>Configuración</span></li>
                         <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>

@@ -51,7 +51,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                       <b-col lg="12" v-show="formulario.reserva.reservas.length">
+                        <b-col lg="12" v-show="formulario.reserva.reservas.length">
                             <b-table-simple class="my-3" show-empty small striped outlined stacked="sm">
                                 <b-thead>
                                     <b-tr class="text-center">
@@ -98,7 +98,7 @@
             <b-card header-text-variant="white" header="Información sobre el cliente" header-bg-variant="primary">
                 <b-form>
                     <b-row>
-                        <b-col xs="12" sm="12" md="6">         
+                        <b-col md="6">         
                             <b-form-group label="Run">
                                 <vue-bootstrap-typeahead 
                                     v-rut:live
@@ -118,7 +118,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="6">                    
+                        <b-col md="6">                    
                             <b-form-group label="Nombre completo">
                                 <b-input-group prepend="Abc">
                                     <b-form-input
@@ -135,7 +135,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="6">                    
+                        <b-col md="6">                    
                             <b-form-group label="Dirección">
                                 <b-input-group prepend="Abc">
                                     <b-form-input
@@ -152,7 +152,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="6">                    
+                        <b-col md="6">                    
                             <b-form-group label="Correo">
                                 <b-input-group prepend="Abc">
                                     <b-form-input
@@ -169,7 +169,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="6">                    
+                        <b-col md="6">                    
                             <b-form-group label="Teléfono">
                                 <b-input-group prepend="123">
                                     <b-form-input
@@ -186,7 +186,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="6">
+                        <b-col md="6">
                             <b-form-group label="Fecha de nacimiento">
                                 <b-input-group prepend="Abc">
                                     <b-form-input
@@ -203,7 +203,7 @@
                             </b-form-invalid-feedback>
                         </b-col>
 
-                        <b-col xs="12" sm="12" md="12">
+                        <b-col md="12">
                             <b-form-group label="Observaciones">
                                 <b-form-textarea
                                     placeholder="Ej: cliente solo con disponibilidad los días lunes."
@@ -224,6 +224,142 @@
 
             <b-card v-if="formulario.cliente.id" header-text-variant="white" header="Historial clínico del cliente" header-bg-variant="primary">
                 <reservas-cliente :id_cliente="formulario.cliente.id"></reservas-cliente>
+            </b-card>
+
+            <b-card v-if="formulario.reserva.servicio_id" header-text-variant="white" header="Información sobre el pago" header-bg-variant="primary">
+                <b-form>
+                    <b-row>
+                        <b-col md="4">                    
+                            <b-form-group label="Subtotal">
+                                <b-input-group prepend="123">
+                                    <b-form-input
+                                        v-model="formulario.venta.subtotal"
+                                        readonly>
+                                    </b-form-input>
+                                </b-input-group>
+                            </b-form-group>
+                        </b-col>
+
+                        <b-col md="4">                    
+                            <b-form-group label="Tipo de documento">
+                                <b-input-group prepend="123">
+                                    <b-form-select
+                                        v-model="$v.formulario.venta.tipo_documento.$model"
+                                        :state="$v.formulario.venta.tipo_documento.$dirty ? !$v.formulario.venta.tipo_documento.$error : null"
+                                        :options="opciones_tipo_documento">
+                                    </b-form-select>
+                                </b-input-group>
+                            </b-form-group>
+                            
+
+                            <b-form-invalid-feedback :state="$v.formulario.venta.tipo_documento.$dirty ? !$v.formulario.venta.tipo_documento.$error : null">
+                                <errores :errores="errores_venta_tipo_documento"></errores>
+                            </b-form-invalid-feedback>
+                        </b-col>
+
+                        <b-col md="4">                    
+                            <b-form-group label="Total">
+                                <b-input-group prepend="123">
+                                    <b-form-input
+                                        v-model="formulario.venta.subtotal"
+                                        readonly>
+                                    </b-form-input>
+                                </b-input-group>
+                            </b-form-group>
+                        </b-col>
+
+                       <b-col lg="12">
+                           <b-form-group>
+                                <b-table-simple class="my-3" show-empty small striped outlined stacked="sm">
+                                    <b-thead>
+                                        <b-tr class="text-center">
+                                            <b-th>#</b-th>
+                                            <b-th>Monto a cancelar</b-th>
+                                            <b-th>Número de documento</b-th>
+                                            <b-th>Medio de pago</b-th>
+                                            <b-th>Monto cancelado</b-th>
+                                        </b-tr>
+                                    </b-thead>
+                                    <b-tbody>
+                                        <b-tr v-for="(p, index) in formulario.venta.pagos" :key="index">
+                                            <b-td class="text-center">{{ index + 1 }}</b-td>
+                                            <b-td>
+                                                <b-input-group prepend="123">
+                                                    <b-form-input
+                                                        v-model="p.monto_a_cancelar"
+                                                        readonly>
+                                                    </b-form-input>
+                                                </b-input-group>
+                                            </b-td>
+                                            <b-td>
+                                                <b-input-group prepend="123">
+                                                    <b-form-input
+                                                        v-model="$v.formulario.venta.pagos.$each[index].numero_documento.$model"
+                                                        :state="$v.formulario.venta.pagos.$each[index].numero_documento.$dirty ? !$v.formulario.venta.pagos.$each[index].numero_documento.$error : null"
+                                                        class="mt-0 mb-0">
+                                                    </b-form-input>
+                                                </b-input-group>
+                                            </b-td>
+                                            <b-td>
+                                                <b-input-group prepend="123" class="mt-0 mb-0">
+                                                    <b-form-select
+                                                        v-model="$v.formulario.venta.pagos.$each[index].medio_pago.$model"
+                                                        :state="$v.formulario.venta.pagos.$each[index].medio_pago.$dirty ? !$v.formulario.venta.pagos.$each[index].medio_pago.$error : null"
+                                                        class="mt-0 mb-0"
+                                                        :options="opciones_medios_pago">
+                                                    </b-form-select>
+                                                </b-input-group>                                     
+                                            </b-td>
+                                            <b-td>
+                                                <b-input-group prepend="123">
+                                                    <b-form-input
+                                                        v-model="$v.formulario.venta.pagos.$each[index].monto_pago.$model"
+                                                        :state="$v.formulario.venta.pagos.$each[index].monto_pago.$dirty ? !$v.formulario.venta.pagos.$each[index].monto_pago.$error : null"
+                                                        class="mt-0 mb-0"
+                                                        @change="calcular_pago(index)">
+                                                    </b-form-input>
+                                                </b-input-group>
+                                            </b-td>
+                                        </b-tr>
+                                    </b-tbody>
+                                </b-table-simple>
+                           </b-form-group>
+                        </b-col>
+
+                        <b-col md="6" class="d-none">                    
+                            <b-form-group label="Descuento">
+                                <b-input-group prepend="123">
+                                    <b-form-input
+                                        placeholder="Ej: 1000"
+                                        v-model="$v.formulario.venta.descuento.$model" 
+                                        :state="$v.formulario.venta.descuento.$dirty ? !$v.formulario.venta.descuento.$error : null"
+                                        @change="calcular_descuento">
+                                    </b-form-input>
+                                </b-input-group>
+                            </b-form-group>
+
+                            <b-form-invalid-feedback :state="$v.formulario.venta.descuento.$dirty ? !$v.formulario.venta.descuento.$error : null">
+                                <errores :errores="errores_venta_descuento"></errores>
+                            </b-form-invalid-feedback>
+                        </b-col>
+
+                        <b-col md="12">
+                            <b-form-group label="Observaciones">
+                                <b-form-textarea
+                                    placeholder="Ej: Queda verificar pago de transferencia."
+                                    v-model="$v.formulario.venta.observacion.$model" 
+                                    :state="$v.formulario.venta.observacion.$dirty ? !$v.formulario.venta.observacion.$error : null">
+                                    rows="6"
+                                    max-rows="10"
+                                ></b-form-textarea>
+
+                                <b-form-invalid-feedback :state="$v.formulario.venta.observacion.$dirty ? !$v.formulario.venta.observacion.$error : null">
+                                    <errores :errores="errores_venta_observacion"></errores>
+                                </b-form-invalid-feedback>
+                            </b-form-group>
+                        </b-col>
+                    </b-row>
+                </b-form>
             </b-card>
 
             <b-row class="mb-5">
@@ -247,8 +383,21 @@
                 clientes: [],
                 profesionales: [],
                 opciones_profesionales: [],
+                opciones_medios_pago: [
+                    { text: 'Selecciona una opción ...', value: null },
+                    { text: 'Bono', value: 1 },
+                    { text: 'Tarjeta débito', value: 2 },
+                    { text: 'Tarjeta crédito', value: 3 },
+                    { text: 'Efectivo', value: 4 },
+                    { text: 'Transferencia', value: 5 }
+                ],
                 servicios: [],
                 opciones_servicios: [],
+                opciones_tipo_documento: [
+                    { text: 'Selecciona una opción ...', value: null },
+                    { text: 'Boleta', value: 1 },
+                    { text: 'Factura', value: 2}
+                ],
                 formulario: {
                     reserva: {
                         id: null,
@@ -265,12 +414,56 @@
                         telefono: null,
                         fecha_nacimiento: null,
                         observacion: ''
+                    },
+                    venta: {
+                        id: null,
+                        subtotal: null,
+                        descuento: 0,
+                        total: null,
+                        tipo_documento: null,
+                        pagos: [],
+                        observacion: ''
                     }
                 }
             }
         },
         validations:{
             formulario: {
+                venta: {
+                    tipo_documento: {
+                        required
+                    },
+                    descuento: {
+                        //requiredIf: requiredIf((value) => {
+                        //    return value > 0
+                        //}),
+                        numeric,
+                        minValue: minValue(0),
+                    },
+                    pagos: {
+                        $each:{
+                            medio_pago: {
+                                required
+                            },
+                            numero_documento: {
+                                required,
+                                numeric,
+                                minValue: minValue(1)
+                            },
+                            monto_pago: {
+                                required,
+                                numeric,
+                                minValue: minValue(1)
+                            }
+                        }
+                    },
+                    observacion: {
+                        requiredIf: requiredIf((value) => {
+                            return value.length < 3
+                        }),
+                        minLength: minLength(3),
+                    }
+                },
                 reserva: {
                     servicio_id: {
                         required,
@@ -391,7 +584,29 @@
                 if (!this.$v.formulario.reserva.profesional_id.$dirty) return errores
                 !this.$v.formulario.reserva.profesional_id.required && errores.push('El campo es requerido.')
                 return errores
+            },
+            errores_venta_tipo_documento () {
+                const errores = []
+                if (!this.$v.formulario.venta.tipo_documento.$dirty) return errores
+                !this.$v.formulario.venta.tipo_documento.required && errores.push('El campo es requerido.')
+                return errores
+            },
+            errores_venta_descuento () {
+                const errores = []
+                if (!this.$v.formulario.venta.descuento.$dirty) return errores
+                !this.$v.formulario.venta.descuento.required && errores.push('El campo es requerido.')
+                !this.$v.formulario.venta.descuento.numeric && errores.push('El campo solo acepta números.')
+                !this.$v.formulario.venta.descuento.minValue && errores.push('El campo debe de tener un valor mínimo de 1.')
+                return errores
+            },
+            errores_venta_observacion () {
+                const errores = []
+                if (!this.$v.formulario.venta.observacion.$dirty) return errores
+                !this.$v.formulario.venta.observacion.required && errores.push('El campo es requerido.')
+                !this.$v.formulario.venta.observacion.minLength && errores.push('Ingresa al menos 3 caracteres.')
+                return errores
             }
+            
         },
         methods: {
             listar_clientes(run){
@@ -452,6 +667,8 @@
             cargar_profesionales(){
                 let me = this
 
+                me.formulario.venta.pagos = []
+
                 let servicio = this.servicios.find(s => this.formulario.reserva.servicio_id == s.id)
 
                 if(servicio){
@@ -465,6 +682,11 @@
                         var profesional = { value: p.id, text: p.nombre }
                         me.opciones_profesionales.push(profesional)
                     })
+
+                    me.formulario.venta.subtotal = servicio.valor
+                    me.formulario.venta.total = servicio.valor
+
+                    me.agregar_pago(servicio.valor)
                 }
                 
             },
@@ -540,7 +762,8 @@
                     url: ruta,
                     data: {
                         'cliente' : me.formulario.cliente,
-                        'reservas': me.formulario.reserva.reservas
+                        'reservas': me.formulario.reserva.reservas,
+                        'venta'   : me.formulario.venta
                     }
                 }).then(function (response) {
                     me.listar_clientes()
@@ -564,6 +787,38 @@
                 this.formulario.reserva.servicio_id = null
                 this.formulario.reserva.profesional_id = null
                 this.formulario.reserva.reservas = []
+
+                this.formulario.venta.id = null
+                this.formulario.venta.subtotal = null
+                this.formulario.venta.descuento = 0
+                this.formulario.venta.total = null
+                this.formulario.venta.tipo_documento = null
+                this.formulario.venta.pagos = []
+            },
+            agregar_pago(cancela){
+                this.formulario.venta.pagos.push({
+                    monto_a_cancelar: cancela,
+                    monto_pago: null,
+                    medio_pago: null,
+                    numero_documento: null
+                })
+            },
+            calcular_pago(index){
+                let me = this
+                let cancelado = this.formulario.venta.pagos.reduce((total, v) => total += parseInt(v.monto_pago), 0)
+
+                me.formulario.venta.pagos.forEach(function(p, index) {
+                    if(p.monto_a_cancelar == p.monto_pago){
+                        me.formulario.venta.pagos.splice((index + 1), me.formulario.venta.pagos.length)
+                    }
+                })
+
+                if(me.formulario.venta.pagos[index].monto_pago < me.formulario.venta.pagos[index].monto_a_cancelar){
+                    me.agregar_pago(me.formulario.venta.pagos[index].monto_a_cancelar - me.formulario.venta.pagos[index].monto_pago)                   
+                }
+            },
+            calcular_descuento(){
+                this.formulario.venta.total = this.formulario.venta.total - this.formulario.venta.descuento
             }
         },
         mounted() {

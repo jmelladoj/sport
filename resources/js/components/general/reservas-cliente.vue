@@ -83,7 +83,7 @@
                 items: [],
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
-                    { key: 'numero_venta', label: 'Número venta', sortable: true, class: 'text-left' },
+                    { key: 'venta_id', label: 'Número venta', sortable: true, class: 'text-left' },
                     { key: 'nombre_servicio', label: 'Servicio', sortable: true, class: 'text-left' },
                     { key: 'nombre_profesional', label: 'Profesional', sortable: true, class: 'text-left' },
                     { key: 'fecha_servicio', label: 'Fecha', sortable: true, class: 'text-left' },

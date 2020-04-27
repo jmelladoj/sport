@@ -34,6 +34,9 @@ class CreateReservasTable extends Migration
             $table->unsignedBigInteger('hora_clinicas_id')->nullable();
             $table->foreign('hora_clinicas_id')->references('id')->on('hora_clinicas');
 
+            $table->unsignedBigInteger('venta_id')->nullable();
+            $table->foreign('venta_id')->references('id')->on('ventas');
+
             $table->text('observacion')->nullable();
             $table->softDeletes();
             $table->timestamps();
