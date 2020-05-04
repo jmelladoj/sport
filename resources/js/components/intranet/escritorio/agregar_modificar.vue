@@ -101,10 +101,9 @@
                         <b-col md="6">         
                             <b-form-group label="Run">
                                 <vue-bootstrap-typeahead 
-                                    v-rut:live
                                     ref="typeahead" 
                                     :data="clientes" 
-                                    :serializer="c => c.run" 
+                                    :serializer="c => c.run + ' - ' + c.nombre" 
                                     placeholder="Escribe para buscar"
                                     :maxMatches="10"
                                     @hit="cliente_seleccionado"
@@ -634,6 +633,8 @@
                     me.formulario.cliente.telefono = cliente.telefono
                     me.formulario.cliente.fecha_nacimiento = cliente.fecha_nacimiento
                     me.formulario.cliente.observacion = cliente.observacion
+
+                    me.$refs.typeahead.inputValue = cliente.run
                 }
             },
             listar_servicios(){
