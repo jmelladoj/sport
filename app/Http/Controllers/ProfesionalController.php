@@ -65,6 +65,23 @@ class ProfesionalController extends Controller
         $profesional = Profesional::find($id);
         $profesional->fill($request->all());
         $profesional->save();
+
+        
+        $ocupados = HorarioProfesional::where('profesional_id', $id)->get()->pluck('hora_clinicas_id');
+        $horarios = HoraClinica::whereNotIn('id', $ocupados)->withTrashed()->get();
+
+        foreach($horarios AS $h){
+            for($i = 1; $i <= 6; $i++){
+                HorarioProfesional::create(
+                    [
+                        'dia' => $i,
+                        'hora' => $h->hora,
+                        'profesional_id' => $profesional->id,
+                        'hora_clinicas_id' => $h->id
+                    ]
+                );
+            }
+        }
     }
 
     public function destroy($id)
