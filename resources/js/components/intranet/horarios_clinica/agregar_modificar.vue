@@ -58,7 +58,7 @@
 </template>
 
 <script>
-    import { required, requiredIf, isUnique } from 'vuelidate/lib/validators'
+    import { required, requiredIf } from 'vuelidate/lib/validators'
     import { mapMutations } from 'vuex'
 
     export default {
@@ -83,22 +83,7 @@
             formulario: {
                 horario_clinica: {
                     hora: {
-                        required,
-                        async isUnique (value) {
-                            if(this.modifica || value === '') return true
-
-                            return new Promise((resolve, reject) => {
-                                axios.get(`/api/horarios/clinica/unico/${value}`)
-                                .then((response) => {
-                                    this.isUnique = response.data
-                                    resolve(response.data)
-                                })
-                                .catch((error) => {
-                                    this.isUnique = false
-                                    reject(false)
-                                })
-                            })                      
-                        }
+                        required
                     },
                     tipo_hora: {
                         required
@@ -111,7 +96,6 @@
                 const errores = []
                 if (!this.$v.formulario.horario_clinica.hora.$dirty) return errores
                 !this.$v.formulario.horario_clinica.hora.required && errores.push('El campo es requerido.')
-                !this.$v.formulario.horario_clinica.hora.isUnique && errores.push('La hora ya se encuentra ingresado en el sistema.')
                 return errores
             },
             errores_horario_clinica_tipo_hora () {

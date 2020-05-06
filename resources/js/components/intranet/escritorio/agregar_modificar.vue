@@ -732,7 +732,7 @@
                     $("#servicio_" + index).append(new Option("Selecciona una opción ...", null))
 
                     response.data.forEach(function(h) {
-                        $("#servicio_" + index).append(new Option(h.hora, h.hora_clinicas_id))
+                        $("#servicio_" + index).append(new Option(h.hora + ' - ' + h.tipo_hora, h.hora_clinicas_id))
                     })
 
                     if(response.data.length > 0){

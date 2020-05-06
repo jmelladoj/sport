@@ -22,7 +22,7 @@
                     </b-thead>
                     <b-tbody>
                         <b-tr class="text-center" v-for="h in horarios" :key="h.id">
-                            <b-td>{{ h.hora }}</b-td>
+                            <b-td class="text-left"><b>{{ h.hora }}</b> - {{ h.tipo_hora == 1 ? 'Hora normal' : 'Hora sobrecupo' }} </b-td>
                             <b-td>
                                 <b-form-checkbox size="lg" v-model="lunes" :value="h.id"></b-form-checkbox>
                             </b-td>

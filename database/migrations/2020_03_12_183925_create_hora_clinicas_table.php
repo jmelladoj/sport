@@ -15,7 +15,7 @@ class CreateHoraClinicasTable extends Migration
     {
         Schema::create('hora_clinicas', function (Blueprint $table) {
             $table->id();
-            $table->string('hora')->unique();
+            $table->string('hora');
             $table->smallInteger('tipo_hora')->default(1);
             $table->softDeletes();
             $table->timestamps();
