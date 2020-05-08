@@ -669,6 +669,7 @@
                 let me = this
 
                 me.formulario.venta.pagos = []
+                me.opciones_profesionales = []
 
                 let servicio = this.servicios.find(s => this.formulario.reserva.servicio_id == s.id)
 
