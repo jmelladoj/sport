@@ -204,7 +204,7 @@
                 axios.get('/api/profesionales').then(function (response) {
                     me.opciones_profesionales.push({ value: null, text: 'Todos'})
 
-                    if(response.data.length) return false
+                    if(response.data.length == 0) return false
 
                     response.data.forEach(function(p) {
                         if(!p.deleted_at){
