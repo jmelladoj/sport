@@ -108,15 +108,16 @@
                     <ul class="metisMenu nav flex-column" id="menu">
                         <li class="nav-heading"><span>Personas</span></li>
                         <li class="nav-item"><router-link class="nav-link" to="/home"><i class="fa fa-home"></i><span class="toggle-none">Escritorio</span></router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/clientes"><i class="fa fa-users"></i><span class="toggle-none">Clientes</span></router-link></li>
+                        <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/clientes"><i class="fa fa-users"></i><span class="toggle-none">Clientes</span></router-link></li>
 
-                        <li class="nav-heading"><span>Clínica</span></li> 
-                        <li class="nav-item"><router-link class="nav-link" to="/profesionales"><i class="fa fa-user-md"></i><span class="toggle-none">Profesionales</span></router-link></li>
-                         <li class="nav-item"><router-link class="nav-link" to="/ventas"><i class="fa fa-usd"></i><span class="toggle-none">Ventas</span></router-link></li>
+                        <li class="nav-heading" v-if="usuario && usuario.tipo_usuario == 1"><span>Clínica</span></li> 
+                        <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/profesionales"><i class="fa fa-user-md"></i><span class="toggle-none">Profesionales</span></router-link></li>
+                         <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/ventas"><i class="fa fa-usd"></i><span class="toggle-none">Ventas</span></router-link></li>
 
-                        <li class="nav-heading"><span>Configuración</span></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
-                        <li class="nav-item"><router-link class="nav-link" to="/horarios/clinica"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
+                        <li class="nav-heading" v-if="usuario && usuario.tipo_usuario == 1"><span>Configuración</span></li>
+                        <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/usuarios"><i class="fa fa-users"></i><span class="toggle-none">Usuarios</span></router-link></li>
+                        <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/especialidades"><i class="fa fa-list"></i><span class="toggle-none">Especialidades</span></router-link></li>
+                        <li class="nav-item" v-if="usuario && usuario.tipo_usuario == 1"><router-link class="nav-link" to="/horarios/clinica"><i class="fa fa-cog"></i><span class="toggle-none">Horas clínica</span></router-link></li>
                         <li class="nav-item"><b-button size="sm" variant="danger" class="btn-rounded mt-4" block @click="logout"><i class="fa fa-sign-out"></i><span class="toggle-none">Salir</span></b-button></li>
                     </ul>
                 </div>

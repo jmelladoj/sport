@@ -145,8 +145,7 @@
                     { key: 'nombre_cliente', label: 'Cliente', sortable: true, class: 'text-left' },
                     { key: 'total', label: 'Total', sortable: true, class: 'text-left' },
                     { key: 'tipo_documento', label: 'Tipo de documento', sortable: true, class: 'text-center' },
-                    { key: 'created_at', label: 'Fecha y hora', sortable: true, class: 'text-center' },
-                    { key: 'acciones', label: 'Acciones', class: 'text-center'}
+                    { key: 'fecha', label: 'Fecha y hora', sortable: true, class: 'text-center' }
                 ],
                 totalRows: 1,
                 currentPage: 1,

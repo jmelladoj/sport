@@ -16,28 +16,20 @@ class CreateReservasTable extends Migration
         Schema::create('reservas', function (Blueprint $table) {
             $table->id();
 
-            $table->string('nombre_cliente');
-            $table->string('nombre_servicio');
-            $table->string('nombre_profesional');
-            $table->String('fecha_servicio')->nullable();
-            $table->smallInteger('estado')->default(1);
+            $table->boolean('pagada')->default(false);
 
+            $table->unsignedBigInteger('profesional_id')->nullable();
+            $table->foreign('profesional_id')->references('id')->on('profesionales');
+            
             $table->unsignedBigInteger('cliente_id')->nullable();
             $table->foreign('cliente_id')->references('id')->on('clientes');
 
             $table->unsignedBigInteger('servicio_id')->nullable();
             $table->foreign('servicio_id')->references('id')->on('servicios');
 
-            $table->unsignedBigInteger('profesional_id')->nullable();
-            $table->foreign('profesional_id')->references('id')->on('profesionales');
-
-            $table->unsignedBigInteger('hora_clinicas_id')->nullable();
-            $table->foreign('hora_clinicas_id')->references('id')->on('hora_clinicas');
-
             $table->unsignedBigInteger('venta_id')->nullable();
             $table->foreign('venta_id')->references('id')->on('ventas');
-
-            $table->text('observacion')->nullable();
+            
             $table->softDeletes();
             $table->timestamps();
         });

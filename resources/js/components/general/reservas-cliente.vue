@@ -48,10 +48,6 @@
                 {{ data.index + 1 }}
             </template>
 
-            <template v-slot:cell(valor)="data">
-                {{ data.item.valor | currency }}
-            </template>
-
             <template v-slot:cell(estado)="data">
                 <b-badge v-if="data.item.estado == 1" variant="warning" class="text-white">Agendada</b-badge>
                 <b-badge v-else-if="data.item.estado == 2" variant="success" class="text-white">Confirmada</b-badge>
@@ -83,7 +79,6 @@
                 items: [],
                 fields: [
                     { key: 'index', label: '#', sortable: true, class: 'text-center' },
-                    { key: 'venta_id', label: 'Número venta', sortable: true, class: 'text-left' },
                     { key: 'nombre_servicio', label: 'Servicio', sortable: true, class: 'text-left' },
                     { key: 'nombre_profesional', label: 'Profesional', sortable: true, class: 'text-left' },
                     { key: 'fecha_servicio', label: 'Fecha', sortable: true, class: 'text-left' },
@@ -114,9 +109,15 @@
             listar_reservas(){
                 let me = this
 
+                me.items = []
                 axios.get('/api/clientes/reservas/'+ this.id_cliente).then(function (response) {
-                    me.items = response.data
+                    response.data.forEach( function(item) {
+                        item.detalle_reservas.forEach(function (detalle){
+                            me.items.push(detalle)
+                        })
+                    })
                 }).catch(function (error) {
+                    console.log(error)
                     me.$store.commit('msg_error')
                 })
             },
@@ -133,7 +134,7 @@
                     cancelButtonText: 'Cancelar'
                 }).then((result) => {
                     if (result.value) {
-                        axios.put('/api/reservas/' + id,{
+                        axios.put('/api/detalle/reserva/' + id,{
                             'estado': accion
                         }).then(function (response) {
                             me.listar_reservas()

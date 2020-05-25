@@ -1,7 +1,7 @@
 <template>
     <div>
         <titulo-pagina titulo="Escritorio" :accion="false">
-            <template slot="btn_accion">
+            <template slot="btn_accion" v-if="usuario && usuario.tipo_usuario == 1">
                 <router-link class="btn btn-success box-shadow btn-icon btn-rounded" to="/reserva/"><i class="fa fa-plus"></i> Agendar consulta</router-link>
             </template>
         </titulo-pagina>
@@ -13,7 +13,7 @@
                     <b-col xs="12" sm="12" md="3"><b-button size="sm" variant="success" class="btn-rounded" v-b-tooltip.hover title="Semana anterior" block @click="listar_dias(2)">Semana anterior</b-button></b-col>
                     <b-col xs="12" sm="12" md="3"><b-button size="sm" variant="success" class="btn-rounded" v-b-tooltip.hover title="Semana siguiente" block @click="listar_dias(1)">Semana siguiente</b-button></b-col>
                     <b-col xs="12" sm="12" md="3">
-                        <b-form-group label="Profesional :" label-cols-md="4" class="mb-0 pb-0">
+                        <b-form-group label="Profesional :" label-cols-md="4" class="mb-0 pb-0" v-if="usuario" :disabled="usuario.tipo_usuario != 1">
                             <b-form-select v-model="profesional" :options="opciones_profesionales"></b-form-select>
                         </b-form-group>
                     </b-col>
@@ -36,122 +36,139 @@
                         <b-tr class="text-center" v-for="h in horas_semana" :key="h.id">
                             <b-td class="font-weight-bold" v-text="h.hora"></b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.lunes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.lunes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.lunes).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.lunes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 2" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.lunes).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-show="filtrar_reservas(h.id, dias.lunes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.martes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.martes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.martes).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.martes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 2" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
-
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3"  class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.martes).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-if="filtrar_reservas(h.id, dias.martes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.miercoles).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.miercoles)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.miercoles).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.miercoles)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 2" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3"  class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.miercoles).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-show="filtrar_reservas(h.id, dias.miercoles).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.jueves).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.jueves)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.jueves).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.jueves)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 2" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3"  class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.jueves).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-show="filtrar_reservas(h.id, dias.jueves).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.viernes).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.viernes)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.viernes).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.viernes)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 2" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3"  class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.viernes).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-show="filtrar_reservas(h.id, dias.viernes).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
                             <b-td>
-                                <b-alert v-show="filtrar_reservas(h.id, dias.sabado).length > 0" class="mb-0" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.sabado)" :key="r.id" :id="r.id" show>
+                                <b-alert v-show="filtrar_reservas(h.id, dias.sabado).length > 0" class="mb-1" :class="profesional == null || profesional == r.profesional_id ? '' : 'd-none'" :variant="r.clase_div" v-for="r in filtrar_reservas(h.id, dias.sabado)" :key="r.id" :id="r.id" show>
                                     <span>{{ r.nombre_cliente }}</span><br>
                                     <span>{{ r.nombre_servicio }}</span><br>
                                     <span>{{ r.nombre_profesional }}</span><br>
 
-                                    <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
-                                        <i class="fa fa-check"></i>
-                                    </b-button>
+                                    <span v-if="usuario.tipo_usuario == 1">
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Confirmar hora" @click="estado_reserva(r.id)">
+                                            <i class="fa fa-check"></i>
+                                        </b-button>
 
-                                    <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
-                                        <i class="fa fa fa-remove"></i>
-                                    </b-button>
+                                        <b-button v-if="r.estado != 3" size="xs" class="btn-rounded" variant="light" v-b-tooltip.hover title="Anular hora" @click="estado_reserva(r.id, 3)">
+                                            <i class="fa fa fa-remove"></i>
+                                        </b-button>
 
-                                    <router-link class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3"  class="btn btn-light btn-rounded btn-xs" :to="{ name: 'reagendar', params: {id: r.id}}"  v-b-tooltip.hover title="Reagendar reserva"><i class="fa fa-calendar"></i></router-link>
+                                        <router-link v-if="r.estado != 3 && r.reserva.pagada == 0" class="btn btn-light btn-rounded btn-xs" :to="{ name: 'pagar', params: {id: r.reserva.id}}"  v-b-tooltip.hover title="Pagar reserva"><i class="fa fa-usd"></i></router-link>
+                                    </span>
                                 </b-alert>
-                                <b-alert class="mb-0" v-show="filtrar_reservas(h.id, dias.sabado).length == 0" variant="info" show>
+                                <b-alert class="mb-1" v-show="filtrar_reservas(h.id, dias.sabado).length == 0" variant="info" show>
                                     Sin reservas
                                 </b-alert>
                             </b-td>
@@ -167,6 +184,8 @@
 </template>
 
 <script>
+    import { mapState } from 'vuex'
+
     export default {
         data() {
             return {
@@ -187,16 +206,21 @@
             }
         },
         computed: {
+            ...mapState('usuario', ['usuario']),
             rango_semanas(){
                 return this.fecha_inicio + " AL " + this.fecha_termino
             }
         },
         methods: {
             filtrar_reservas(hora, fecha){
+                let me = this
                 return this.reservas.filter(function(r) {
-                    return r.hora_clinicas_id == hora && r.fecha_servicio == fecha;
+                    if(me.usuario && me.usuario.tipo_usuario == 1){
+                        return r.hora_clinicas_id == hora && r.fecha_servicio == fecha;
+                    } else {
+                        return r.hora_clinicas_id == hora && r.fecha_servicio == fecha && me.profesional != null && me.profesional == r.profesional_id;
+                    }
                 })
-
             },
             listar_profesionales(){
                 let me = this
@@ -271,11 +295,16 @@
                         })
                     }
                 })
-            }
+            },
+
         },
         mounted() {
             this.listar_dias()
             this.listar_profesionales()
+
+            if(this.usuario && this.usuario.tipo_usuario != 1){
+                this.profesional = this.usuario.id
+            }
         }
     }
 </script>

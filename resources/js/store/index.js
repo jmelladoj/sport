@@ -54,7 +54,7 @@ export default new Vuex.Store({
 
             state.notificacion.mensaje = ''
         },
-        msg_error(state, mensaje = "Ha ocurrido un error al ingresar el registro."){
+        msg_error(state, mensaje = "Ha ocurrido un error al ejecutar la acción."){
             state.notificacion.mensaje = mensaje
 
             Vue.$toast.open({

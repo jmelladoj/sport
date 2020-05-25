@@ -119,10 +119,9 @@
                     me.actualizar(response.data.usuario)
                     me.$router.push('home')
                 }).catch(function (error) {
-                    console.error(error)
-                    if (error.response.status == 422){
+                    if (error.response.status == 401 || error.response.status == 422){
                         me.login.password = ''
-                        me.$store.commit('msg_error')
+                        me.msg_error('Usuario o contraseña incorrectos. Por favor intenta nuevamente.')
                     }
                 })
             }

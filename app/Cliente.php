@@ -13,6 +13,6 @@ class Cliente extends Model
     protected $guarded = ['id'];
 
     public function reservas(){
-        return $this->hasMany(Reserva::class, 'cliente_id')->withTrashed();
+        return $this->hasMany(Reserva::class, 'cliente_id')->with('detalle_reservas')->withTrashed();
     }
 }

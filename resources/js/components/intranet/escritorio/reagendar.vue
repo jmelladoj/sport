@@ -86,9 +86,9 @@
 
                 let me = this
 
-                axios.get('/api/reservas/'+ this.$route.params.id).then(function (response) {
+                axios.get('/api/detalle/reserva/'+ this.$route.params.id).then(function (response) {
                     me.formulario.reserva.fecha = response.data.fecha_servicio
-                    me.formulario.reserva.profesional_id = response.data.profesional_id
+                    me.formulario.reserva.profesional_id = response.data.reserva.profesional_id
 
                     me.obtener_horarios()
                 }).catch(function (error) {
@@ -133,7 +133,7 @@
 
                 axios({
                     method: 'PUT',
-                    url: '/api/reservas/' + this.$route.params.id,
+                    url: '/api/detalle/reserva/' + this.$route.params.id,
                     data: {
                         'fecha_servicio': me.formulario.reserva.fecha,
                         'hora_clinicas_id': me.formulario.reserva.hora_clinicas_id

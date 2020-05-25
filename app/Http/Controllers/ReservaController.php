@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Cliente;
 use App\DetallePagos;
+use App\DetalleReserva;
 use App\HoraClinica;
 use App\Profesional;
 use App\Reserva;
@@ -16,8 +17,8 @@ class ReservaController extends Controller
 {
     //
     public function index($fecha_inicio, $fecha_termino){
-        $reservas = Reserva::whereBetween('fecha_servicio', [$fecha_inicio, $fecha_termino])->get();
-        $horarios_mostrar = Reserva::whereBetween('fecha_servicio', [$fecha_inicio, $fecha_termino])->get()->pluck('hora_clinicas_id');
+        $reservas = DetalleReserva::whereBetween('fecha_servicio', [$fecha_inicio, $fecha_termino])->get();
+        $horarios_mostrar = DetalleReserva::whereBetween('fecha_servicio', [$fecha_inicio, $fecha_termino])->get()->pluck('hora_clinicas_id');
 
         return [
                 'reservas' => $reservas,
@@ -36,38 +37,46 @@ class ReservaController extends Controller
             $cliente = Cliente::create($request->cliente);
         }
 
-        $venta = Venta::create([
-            'subtotal' => $request->venta['subtotal'],
-            'descuento' => $request->venta['descuento'],
-            'total' => $request->venta['total'],
-            'tipo_documento' => $request->venta['tipo_documento'],
-            'observacion' => $request->venta['observacion'],
-            'nombre_cliente' => $cliente->nombre,
-            'cliente_id' => $cliente->id
+        $reserva = Reserva::create([
+            'pagada' => $request->reserva['pagada'],
+            'profesional_id' => $request->reserva['profesional_id'],
+            'cliente_id' => $cliente->id,
+            'servicio_id' => $request->reserva['servicio_id']
         ]);
 
-        $detalle_pagos = $request->venta['pagos'];
-
-        foreach ($detalle_pagos as $key => $item) {
-            $item['venta_id'] = $venta->id;
-            
-            DetallePagos::create([
-                'venta_id' => $venta->id,
-                'monto_pago' => $item['monto_pago'],
-                'medio_pago' => $item['medio_pago'],
-                'numero_documento' => $item['numero_documento'],
+        $detalle = $request->detalle_reservas;
+        
+        foreach ($detalle as $key => $item) {
+            DetalleReserva::create([
+                'fecha_servicio' => $item['fecha_servicio'],
+                'estado' => $item['estado'],
+                'hora_clinicas_id' => $item['hora_clinicas_id'],
+                'reserva_id' => $reserva->id
             ]);
+        }   
+        
+        if($request->reserva['pagada'] == 1){
+            $venta = Venta::create([
+                'subtotal' => $request->venta['subtotal'],
+                'descuento' => $request->venta['descuento'],
+                'total' => $request->venta['total'],
+                'tipo_documento' => $request->venta['tipo_documento'],
+                'observacion' => $request->venta['observacion'],
+                'cliente_id' => $cliente->id
+            ]);
+
+            $detalle_pagos = $request->pagos;
+
+            foreach ($detalle_pagos as $key => $item) {
+                DetallePagos::create([
+                    'venta_id' => $venta->id,
+                    'monto_pago' => $item['monto_pago'],
+                    'medio_pago' => $item['medio_pago'],
+                    'numero_documento' => $item['numero_documento'],
+                ]);
+            }
+
         }
-
-        $reservas = $request->reservas;
-
-        foreach ($reservas as $key => $item) {
-            $item['cliente_id'] = $cliente->id;
-            $item['nombre_cliente'] = $cliente->nombre;
-            $item['venta_id'] = $venta->id;
-            Reserva::create($item);
-        }        
-        //
 
     }
 
@@ -77,10 +86,37 @@ class ReservaController extends Controller
         return Reserva::withTrashed()->find($id);
     }
 
+    public function pago(Request $request, $id){
+        $reserva = Reserva::find($id);
+
+        $venta = Venta::create([
+            'subtotal' => $request->venta['subtotal'],
+            'descuento' => $request->venta['descuento'],
+            'total' => $request->venta['total'],
+            'tipo_documento' => $request->venta['tipo_documento'],
+            'observacion' => $request->venta['observacion'],
+        ]);
+
+        $detalle_pagos = $request->pagos;
+
+        foreach ($detalle_pagos as $key => $item) {
+            DetallePagos::create([
+                'venta_id' => $venta->id,
+                'monto_pago' => $item['monto_pago'],
+                'medio_pago' => $item['medio_pago'],
+                'numero_documento' => $item['numero_documento'],
+            ]);
+        }
+
+        $reserva->pagada = 1;
+        $reserva->venta_id = $venta->id;
+        $reserva->save();
+    }
+
     public function update(Request $request, $id) 
     {
         //
-        $reserva = Reserva::find($id);
+        $reserva = DetalleReserva::find($id);
         $reserva->fill($request->all());
         $reserva->save();
     }

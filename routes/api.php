@@ -37,6 +37,7 @@ Route::middleware(['auth:api'])->group(function () {
     //Rutas de profesionales
     Route::apiResource('profesionales', 'ProfesionalController');
     Route::get('/profesionales/unico/{texto}', 'ProfesionalController@unico')->name('profesional.unico');
+    
 
     //Rutas de clientes
     Route::apiResource('clientes', 'ClienteController');
@@ -49,11 +50,18 @@ Route::middleware(['auth:api'])->group(function () {
     //Rutas de reservas
     Route::apiResource('reservas', 'ReservaController')->except(['index']);
     Route::get('/reservas/{fecha_inicio}/{fecha_termino}', 'ReservaController@index')->name('reservas.index');
+    Route::put('/pago/reserva/{id}', 'ReservaController@pago')->name('reservas.pago');
 
     //Rutas de reservas
     Route::apiResource('ventas', 'VentaController');
 
     //Rutas de usuarios
     Route::apiResource('horarios', 'HoraClinicaController');
+
+    //Rutas de usuarios
+    Route::apiResource('usuarios', 'UsuarioController');
+    Route::get('/usuarios/unico/{texto}', 'UsuarioController@unico')->name('usuario.unico');  
+
+    Route::apiResource('/detalle/reserva', 'DetalleReservaController');
 });
 

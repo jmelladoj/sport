@@ -45,6 +45,8 @@ import Login from './components/login.vue'
 import Escritorio from './components/intranet/escritorio/index.vue'
 import Reservas_agregar_modificar from './components/intranet/escritorio/agregar_modificar.vue'
 import Reagendar from './components/intranet/escritorio/reagendar.vue'
+import Pagar from './components/intranet/escritorio/pago.vue'
+
 //Rutas de especialidades
 import Especialidades from './components/intranet/especialidades/index.vue'
 import Especialidades_agregar_modificar from './components/intranet/especialidades/agregar_modificar.vue'
@@ -61,13 +63,18 @@ import Horarios_clinica_agregar_modificar from './components/intranet/horarios_c
 import Profesionales from './components/intranet/profesionales/index.vue' 
 import Profesionales_agregar_modificar from './components/intranet/profesionales/agregar_modificar.vue' 
 import Profesionales_horarios_agregar_modificar from './components/intranet/profesionales/horarios.vue' 
-//Rutas de profesionales
+
+//Rutas de clientes
 import Clientes from './components/intranet/clientes/index.vue' 
 import Clientes_agregar_modificar from './components/intranet/clientes/agregar_modificar.vue' 
 import Reservas_cliente from './components/intranet/clientes/reservas.vue' 
 
-//Rutas de profesionales
+//Rutas de ventas
 import Ventas from './components/intranet/ventas/index.vue' 
+
+//Rutas de usuaruios
+import Usuarios from './components/intranet/usuarios/index.vue'
+import Usuarios_agregar_modificar from './components/intranet/usuarios/gestionar.vue'
 
 //Estilos
 import 'vue-toast-notification/dist/theme-default.css';
@@ -83,6 +90,7 @@ const router = new VueRouter({
                 //Ruta de reservas
                 { path: '/reserva/:id?', name: 'administrar_reservas', component: Reservas_agregar_modificar },
                 { path: '/reserva/reagendar/:id?', name: 'reagendar', component: Reagendar },
+                { path: '/reserva/pagar/:id', name: 'pagar', component: Pagar },
 
                 //Rutas de especialidades
                 { path: '/especialidades', name: 'especialidades', component: Especialidades },
@@ -108,6 +116,10 @@ const router = new VueRouter({
 
                 //Rutas de ventas
                 { path: '/ventas', name: 'ventas', component: Ventas},
+
+                //Rutas de usuarios
+                { path: '/usuarios', name: 'usuarios', component: Usuarios },
+                { path: '/usuarios/administrar/:id?', name: 'administrar_usuarios', component: Usuarios_agregar_modificar },
             ]
         },
     ],

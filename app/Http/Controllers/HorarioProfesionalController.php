@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\DetalleReserva;
 use App\HorarioProfesional;
 use App\Reserva;
 use Illuminate\Http\Request;
@@ -13,9 +14,10 @@ class HorarioProfesionalController extends Controller
         //
         $dia = date('w', strtotime($request->fecha));
 
-        $reservas = Reserva::where('profesional_id', $request->profesional_id)->where('fecha_servicio', $request->fecha)->get()->pluck('hora_clinicas_id');
-        $horarios_profesional =  HorarioProfesional::where('profesional_id', $request->profesional_id)->where('dia', $dia)->where('trabaja', 1)->whereNotIn('hora_clinicas_id', $reservas)->get();
-        
+        $reservas = Reserva::where('profesional_id', $request->profesional_id)->get()->pluck('id');
+        $detalle_reservas = DetalleReserva::where('fecha_servicio', $request->fecha)->whereIn('reserva_id', $reservas)->pluck('hora_clinicas_id');
+        $horarios_profesional =  HorarioProfesional::where('profesional_id', $request->profesional_id)->where('dia', $dia)->where('trabaja', 1)->whereNotIn('hora_clinicas_id', $detalle_reservas)->get();
+
         return $horarios_profesional;
     }
 

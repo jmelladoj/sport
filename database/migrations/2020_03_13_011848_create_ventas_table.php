@@ -22,8 +22,6 @@ class CreateVentasTable extends Migration
             $table->integer('tipo_documento')->nullable()->default(1);
             $table->text('observacion')->nullable();
 
-            $table->string('nombre_cliente');
-
             $table->unsignedBigInteger('cliente_id')->nullable();
             $table->foreign('cliente_id')->references('id')->on('clientes');
 
